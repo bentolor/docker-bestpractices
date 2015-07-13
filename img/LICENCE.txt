@@ -1,0 +1,5 @@
+Lizenzen der verwendeten Bilder
+
+- docker-logo-large-dark-horiz-transparent.png, Produktlogo = Zitat
+- Southampton_container_port_2_ships: Geni http://commons.wikimedia.org/wiki/File:Southampton_container_port_2_ships.JPG / CC-BY-SA-4.0 https://creativecommons.org/licenses/by-sa/4.0/
+- Money GIF: Unklar; Quelle:  http://youngmunchkin.tumblr.com/post/57238759142 
