@@ -44,6 +44,15 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 
+<!--
+				<section data-markdown>
+					TODO
+					----
+					- Trademark Hinweise bei den Logofolien aufnehmen
+					- Screen-Recordings der Live-Demos
+					- Live-Demos Seiten als Fragements mit Live-Recordings zu einer Seite zusammenfassen
+				</section>
+-->
 				<section>
 					<div id="title">
 					<h1 style="margin: 10px">Teile und Herrsche</h1>
@@ -167,12 +176,12 @@
 
 							<br> Hallo und Ein herzliches Willkommen zu unsere_ — mein Name ist '...'.
 							Speaker 2:  Mein Name ist Ralph Guderlei ... und gemeinsam wollen wir heute ein bisschen
-							Licht auf das Schlagwort docker werfen.
+							Licht auf das Schlagwort Docker werfen.
 						</aside>
 					</section>
 
 					<section>
-						<h2>Jump into docker: Live Demo</h2>
+						<h2>Jump into Docker: Live Demo</h2>
 						<div class="fragment compact" style="width: 1000px; margin: auto">
 						<pre><code data-trim class="bash" >
 $ mvn -o package
@@ -333,7 +342,7 @@ $ sensible-browser "http://localhost:8080/hello-world"
 							  - Dieser verwaltet sowohl die laufenden Container, als auch die Images.
 							  - Der Daemon ist also Zuständig dafür, Container-Instanzen anzulegen, starten und zu
 								stoppen
-							- Über ein CLI Tool kann der docker Dienst (remote) gesteuert werden.
+							- Über ein CLI Tool kann der Docker Dienst (remote) gesteuert werden.
 							- Aus dem Cloud-Repository lassen sich Images abholen
 						</aside>
 					</section>
@@ -390,7 +399,7 @@ $ sensible-browser "http://localhost:8080/hello-world"
 							<h4 style="color: #333;">Base Images</h4>
 
 							<div data-markdown>
-							- [~130 offizielle Images](https://registry.hub.docker.com/repos/library/?&s=stars)
+							- [~100 offizielle Images](https://hub.docker.com/explore/)
 							- 100.000+ Images insgesamt
 							- 200+ Millionen Downloads
 							</div>
@@ -832,8 +841,154 @@ docker run -d --name balancer \
 							- no, you will not use a community-contributed image without looking at what it will do
 							- Versionierung ermöglicht einfaches Rollback
 						</aside>
+					</section>-->
+
+					<!-- <section>
+						<h2>Docker-freundliche Java-Anwendungen</h2>
+						<ul>
+							<li>Paketieren als uber jar</li>
+							<li>Ausführbar mit <code>java -jar myapp.jar</code></li>
+							<li>Konfiguration per Environment-Variablen</li>
+							<li>Embedded server (jetty, undertow, vert.x, ...)</li>
+							<li>Logging nach STDOUT/STDERR</li>
+						</ul>
+						<aside class="notes" data-markdown>
+							- uberjar -> wenig zu kopieren
+							- mit einem Kommando ohne viele Parameter ausführbar -> wenig Fehlermöglichkeiten
+							- Konfig via environment -> einfache Konfiguration über Container-Runtime
+							- embeddesd Server -> keine aufwändige Konfiguration des Containers
+							- logging nach STDOUT -> docker logs
+						</aside>
+					</section> -->
+
+
+				</section>
+
+				<!--
+				#######################################################################################################
+					Orchestrierung / Clustering
+				#######################################################################################################
+				-->
+				<section>
+					<section class="toc-element">
+						<h1>Docker Distributed</h1>
 					</section>
 
+					<section>
+						<h2>Orchestrierung - Docker Compose</h2>
+						<pre><code data-trim class="yml">
+haproxy:
+  image: haproxy:1.5
+  ports:
+    - 8080:80
+  volumes:
+    - ./etc/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+  links:
+    - web1
+    - web2
+    - web3
+
+web1:
+  image: exxcellent/docker_talk
+						</code></pre>
+					</section>
+
+					<section style="background: rgba(0,0,0,.6)"
+						data-background="img/blades.jpg"
+						data-background-transition="zoom">
+
+						<h2>Cluster-Betrieb</h2>
+						<ul>
+							<li>Verteilung &amp; Scheduling</li>
+							<li>Service Discovery</li>
+							<li>Load Balancing </li>
+						</ul>
+						<aside class="notes" data-markdown>
+							Aus einem mach viele
+							- bisher auf einen Host beschränkt
+							- verteilte Anwendung -> viele Hosts
+
+							Wenn man mehrere Rechner hat kommt man zu einer Reihe von Problemen:
+							- wie verteilt man die Anwendung?
+							- woher weiß man, auf welchem Rechner eine Anwendung/Service laufen?
+							- wie wird die Last auf die einzelnen Instanzen verteilt?
+						</aside>
+					</section>
+
+					<section>
+						<div class="container" data-markdown>
+							## Docker out of the box
+							##### Pures `localhost`: (bis Docker 1.8)
+							- `--link` und Volumes nur auf lokalem Host
+							- Kein cross-host Netzwerk
+
+							##### Add-on Tools
+							- Unübersichtliches, dynamisches Ökosystem   <!-- -->
+							- Sehr oft nur Einzelteile einer Gesamtlösung
+							- Eher fragil; volles Verständnis notwendig
+						</div>
+					</section>
+
+					<!--
+					<section>
+						<div class="container sm"  data-markdown>
+							## Übersicht Ökosystem
+
+							| Kategorie          | Tools |
+							|--------------------|-------|
+							| Container/Host OS  | CoreOS, RancherOS, Snappy Ubuntu, ...   |
+							| Config Mgmt.  	 | Puppet, Chef, Ansible, Capistrano, ...  |
+							| Container Grouping | Docker Compose, Kubernetes, Maestro, crane |
+							| Image Registry     | Docker Distribution, Artifactory, ...  |
+							| Networking         | Weave, Flannel, Skydock, ... |
+							| Service Discovery  | etcd, Consul, Zookeeper, ... |
+							| Scheduler          | fleet, Marathon/Mesos, Docker Swarm |
+							| Cluster Mgmt.      | Shipyard, MaestroNG, **Rancher** |
+						</div>
+					</section>
+				-->
+
+					<section>
+						<h2>Tools</h2>
+
+						<img src="img/logos/mesos_400x400.png" alt="Mesos" class="glow plain" width=200>
+						<img src="img/logos/marathon.png" alt="Marathon" class="glow plain" width=200>
+						<img src="img/logos/aurora_400x400.png"  alt="Aurora" class="glow plain" width=200>
+					  <br>
+						<img src="img/logos/rancher_400x400.png"  alt="Rancher" class="glow plain" width=200>
+						<img src="img/logos/kubernetes.png"  alt="Kubernetes" class="glow plain" width=200>
+						<img src="img/logos/swarm.png"  alt="Docker Swarm" class="glow plain" width=200>
+					  <br>
+						<img src="img/logos/weave.png"  alt="Weaveworks" class="glow plain" width=200>
+
+						<aside class="notes" data-markdown>
+							- Mesos + Marathon/Aurora
+							- Kubernetes
+							- Rancher
+							- Docker Machine/Compose/Swarm (BETA)
+							- Weaveworks
+						</aside>
+					</section>
+
+					<section data-background-video="video/rancher-demo.webm" data-state="webm-video">
+	        </section>
+
+					<section>
+						<h2>Beispiel - verteiltes System</h2>
+						<img src="img/verteilt.png" class="plain" width="600">
+						<aside class="notes" data-markdown>
+							Vereiltes System aus
+							- load balancer 1x
+							- web/rest-Knoten 1..n
+							- Message Queue 1x
+							- Worker 1..m
+							- Datenbank 1x
+
+							Jeder Kasten ein Docker-Container:
+							- Rot: leicht skalierbar, gut im Cluster zu verteilen
+							- Grün: eher ausserhalb wegen Erreichbarkeit (LB) oder Datenhaltung (DB)
+						</aside>
+					</section>
 				</section>
 
 				<!--
@@ -848,14 +1003,14 @@ docker run -d --name balancer \
 					</section>
 
 					<section>
-						<h2>docker &amp; Windows</h2>
+						<h2>Docker &amp; Windows</h2>
 
 						<div class="container">
 							<img class="plain" data-src="img/boot2docker.png" alt="boot2docker logo"/>
 							<div style="float: right; margin-left: 60px; " data-markdown>
 								##### Heute: (Linux container)
 								- boot2docker
-								- docker auf Microsoft Azure
+								- Docker auf Microsoft Azure
 
 								##### Zukunft: (Windows container)
 								- Windows Server Containers
@@ -867,7 +1022,7 @@ docker run -d --name balancer \
 							- Einstieg auch auf Windows: boot2docker sehr komfortabel. Startet eine Virtualbox in
 							  welcher die Container laufen.
 							- Nicht auf Linux beschränkt. Microsoft arbeitet bereits eng mit Docker zusammen:
-							    - Ein windows docker client gibt es bereits: Deployment von Linux VMs
+							    - Ein windows Docker client gibt es bereits: Deployment von Linux VMs
 								- Auf Azure kann man Linux Container starten
 								- Docker-Anbindung an Windows-Server-Containern und Hyper-V-Containern auf dem Weg
 						</aside>
@@ -895,10 +1050,10 @@ docker run -d --name balancer \
 
 						<aside class="notes" data-markdown>
 							- »Let’s Dockerize everything« ➱ ziemlich wild & übermütig
-							- Brauche ich docker?
+							- Brauche ich Docker?
 								- Signifikante Vorteile von Container/speziell Docker?
 								- Habe ich technische Ressourcen für komplexe, ungelöste Probleme?
-							- Unklare Ausrichtung docker führt zu Alternativen
+							- Unklare Ausrichtung Docker führt zu Alternativen
 						</aside>
 					</section>
 
@@ -934,7 +1089,7 @@ docker run -d --name balancer \
 					</section>
 
 					<section>
-						<h2>Potential docker</h2>
+						<h2>Potential Docker</h2>
 						<div class="container">
 
 						<div class="twocol" style="margin: 0 0 0 32px;">
@@ -967,7 +1122,7 @@ docker run -d --name balancer \
 
 						<div class="fragment decent" >
 							<div data-markdown class="sm" style="border-top: 5px solid #42affa; margin: 16px auto 0; padding: 32px 0 0 0 ;">
-								#### Brauche ich docker?
+								#### Brauche ich Docker?
 								- Was sind signifikante Vorteile?
 								- Ressourcen für komplexe, ungelöste Probleme?
 							</div>
@@ -1006,30 +1161,50 @@ docker run -d --name balancer \
 					style="background: rgba(0,0,0,.6)"
 					data-background="https://33.media.tumblr.com/fff297fe7db149b209e91cfbca70acd0/tumblr_mi6xc7l6Be1s5ys1do1_500.gif"
 					data-background-transition="zoom">
-					<h2>Tools &amp; Referenzen</h2>
+					<h2>Tools</h2>
 
-					<div class="container" style="font-size: 70%;">
+					<div class="container" style="font-size: 68%;width: 90%; line-height: 1.1em;">
 						<div data-markdown class="col3-l">
 							###### GUIs
-							- dockerUI
-							- shipyard
-							- panamax
-							- docker Kitematic
+							- Docker [Kitematic](https://kitematic.com/)
+							- [Panamax](http://panamax.io/), ...
 
 							##### Spezielle Linux-Distros
-							- [Rancher](http://rancher.com/rancher-io/) &  [RancherOS](http://rancher.com/rancher-os/)
-							- [CoreOS](https://coreos.com/)
+							- [RancherOS](http://rancher.com/rancher-os/)
+							- [CoreOS](https://coreos.com/), ...
+
+ 							###### Private Image Registry
+							- Docker [Distribution](https://github.com/docker/distribution)
+							- [Artifactory](http://www.jfrog.com/open-source/), ...
+
+							###### Networking
+							- [Weaveworks](http://weave.works/)
+							- CoreOS [Flannel](https://github.com/coreos/flannel), ...
 						</div>
 
 						<div data-markdown class="col3-c">
-							###### Orchestrierung
-							- Kubernetes
-							- docker Compose &amp;
-							  docker Swarm
-							- Apache Mesos mit Marathon
+							###### Service discovery
+							- CoreOS [etcd](https://github.com/coreos/etcd)
+							- Apache [Zookeeper](https://zookeeper.apache.org/)
+							- [Consul](https://www.consul.io/)
+
+							###### Cluster / Orchestrierung
+							- [Rancher](http://rancher.com/rancher-io/)
+							- [Kubernetes](http://kubernetes.io/)
+							- [Shipyard](http://shipyard-project.com/)
+							- Docker [Compose](https://docs.docker.com/compose/) / [Swarm](http://docs.docker.com/swarm/)
+							- Apache [Mesos](http://mesos.apache.org/) / [Marathon](https://mesosphere.github.io/marathon/)
+							- [MaestroNG](https://github.com/signalfuse/maestro-ng)
+							- CoreOS [fleet](https://github.com/coreos/fleet), ...
 						</div>
 
 						<div data-markdown  class="col3-r">
+							###### Config Mgmt.
+							- [Ansible](http://www.ansible.com/)
+							- [Puppet](https://puppetlabs.com/)
+							- [Chef](https://www.chef.io/)
+							- [Capistrano](http://capistranorb.com/)
+
 							###### Interessante Java-Tools
 							- [Dropwizard](http://dropwizard.io)
 							- [Spark](http://sparkjava.com)
@@ -1041,9 +1216,13 @@ docker run -d --name balancer \
 						<div style="clear:both"/>
 
 						<div data-markdown style="font-size: 0.6em; color: #666; padding: 20px 0;">
-							Image Credits: _Southampton Container Port_
+							Image Credits:
+							_Southampton Container Port_
 							[Geni](http://commons.wikimedia.org/wiki/File:Southampton_container_port_2_ships.JPG) /
-							[CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+							[CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/),
+							_Blades_
+							[zagrobot](https://www.flickr.com/photos/zagrobot/2731084578)
+							[CC-BY-2.0](https://creativecommons.org/licenses/by/2.0/)
 						</div>
 					</div>
 				</section>
@@ -1166,6 +1345,13 @@ docker run -d --name balancer \
 					{ src: 'plugin/notes/notes.js', async: true }
 				]
 			});
+
+			Reveal.addEventListener( 'webm-video', function() {
+				var videoElems = document.getElementsByTagName("VIDEO");
+    			if (videoElems && videoElems.length > 0) {
+					videoElems[0].playbackRate = 3.0;
+				}
+			} );
 
 		</script>
 
