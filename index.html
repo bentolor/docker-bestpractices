@@ -107,7 +107,7 @@
 							? für Hilfe, S für Folien-Notizen
 						</div>
 						<div id="version">
-							15. Juni 2015
+							21. September 2021
 						</div>
 						<div id="licence">
 							<a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
@@ -141,7 +141,7 @@
 						<div class="fragment grow" style="position: absolute; top: 200px; left: 100px;">
 							<img alt="Red Hat Logo" class="glow plain" style="width:400px;" data-src="https://upload.wikimedia.org/wikipedia/ar/6/6c/RedHat.svg"/></div>
 						<div class="fragment grow"  style="margin-top: -0px;">
-							<img alt="Google Logo" class="glow plain" style="width:400px;" data-src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Logo_Google_2013_Official.svg"/></div>
+							<img alt="Google Logo" class="glow plain" style="width:400px;" data-src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"/></div>
 						<div class="fragment grow"  style="position: absolute; top: 250px; right: 100px;">
 							<img alt="Amazon Logo" class="glow plain" style="width:400px;" data-src="https://upload.wikimedia.org/wikipedia/commons/6/62/Amazon.com-Logo.svg"/>
 						</div>
@@ -167,11 +167,11 @@
 					<section>
 						<h2 class="fragment grow highlight-current-blue">Hype?</h2>
 						<p style="text-align: center; color: #aaa; font-style: italic">oder</h2>
-						<h2 class="fragment grow highlight-current-blue">»The next big thing«?</h2>
+						<h2 class="fragment grow highlight-current-blue">»Wertvolles Werkzeug«?</h2>
 						<div class="fragment"/>
 
 						<aside class="notes" data-markdown>
-							Ist das Docker nur ein Hype oder wirklich »the next big thing«? Dieser Frage möchten
+							Ist das Docker nur ein Hype oder wirklich ein »Wertvolles Werkzeug«? Dieser Frage möchten
 							wir heute auf den Grund gehen!
 
 							<br> Hallo und Ein herzliches Willkommen zu unsere_ — mein Name ist '...'.
@@ -195,12 +195,12 @@ $ docker run -d --name web1 my/microservice
 $ docker run -d --name web2 my/microservice
 $ docker run -d --name web3 my/microservice
 
-$ docker pull haproxy:1.5
+$ docker pull haproxy:lts
 $ docker run -d --name balancer \
 	--link web1:web1 --link web2:web2 --link web3:web3 \
-	-p 8080:80 \
+	-p 80:80 \
 	-v (pwd)/etc:/usr/local/etc/haproxy:ro \
-	haproxy:1.5
+	haproxy:lts
 $ sensible-browser "http://localhost:8080/hello-world"
 						</code></pre>
 						</div>
@@ -418,11 +418,11 @@ $ sensible-browser "http://localhost:8080/hello-world"
 					<section>
 						<h3>Images bauen: <code>Dockerfile</code></h3>
 
-						<pre><code data-trim class="docker compact">FROM java:8
+						<pre><code data-trim class="docker compact">FROM openjdk:slim
 MAINTAINER Inspector Gadget
 
                             # Kommando im Container ausführen
-RUN apt-get update &amp;&amp; apt-get dist-upgrade -y &amp;&amp;  \
+RUN apt-get update &amp;&amp; apt-get install unzip -y &amp;&amp;  \
     apt-get clean &amp;&amp; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
                             # JAR und Config-File in Image aufnehmen
@@ -620,12 +620,12 @@ ENTRYPOINT java -jar app.jar server
 							<div data-markdown class="fragment decent compact tgap" style="font-size: 80%">
 								Option 1: _Container Volumes_
 
-								    docker create -v /mydata --name mydata java:8 /bin/true
+								    docker create -v /mydata --name mydata openjdk:slim /bin/true
 								    docker run -d --volumes-from mydata my/dockerapp
 
 								Option 2: _Lokale Verzeichnisse_
 
-								    docker run -v $(pwd)/etc:/usr/local/etc:ro haproxy:1.5
+								    docker run -v $(pwd)/etc:/usr/local/etc:ro haproxy:lts
 							</div>
 						</div>
 						<aside class="notes" data-markdown>
@@ -638,7 +638,7 @@ ENTRYPOINT java -jar app.jar server
 							If you have some persistent data that you want to share between containers, or want to
 							use from non-persistent containers.
 
-							Let's create a new named container with a volume to share. It reuses the `java:8` image
+							Let's create a new named container with a volume to share. It reuses the `openjdk:slim` image
 							so that all containers are using layers in common, saving disk space.
 						</aside>
 					</section>
@@ -680,9 +680,9 @@ docker run -d --name web3 my/microservice
 
 docker run -d --name balancer \
     --link web1:web1 --link web2:web2 --link web3:web3 \
-    -p 8080:80 \
+    -p 80:80 \
     -v (pwd)/etc:/usr/local/etc/haproxy:ro \
-    haproxy:1.5</code></pre>
+    haproxy:lts</code></pre>
 
 						<aside class="notes" data-markdown>
 						    ...und damit haben wir alle Elemente aus der Eingangs-Demo kennen gelernt.
@@ -785,9 +785,14 @@ docker run -d --name balancer \
 					<section data-background="img/spark.jpg" data-background-transition="zoom">
 						<div class="container"
 							style="background-color: rgba(64,64,64,.8); border: 2px solid #555;
-						 	position: absolute; left: 0px; top: -300px; padding: 0 32px 18px; "
+						 	position: absolute; left: 0px; padding: 0 32px 18px; "
 							data-markdown>
 							**Microservice Frameworks**
+							- **Quarkus.io**
+							- **Micronaut.io**
+							- **Helidon**
+							- Spring Fu 
+							- Ktor
 							- Spark Framework
 							- Dropwizard
 							- Spring Boot
@@ -795,6 +800,9 @@ docker run -d --name balancer \
 						</div>
 
 						<aside class="notes" data-markdown>
+
+							- Spring Fu 
+							- Ktor
 							- Spark: Micro-Framework
 							- Dropwizard: Best of JEE
 							- Spring Boot: Stand-alone Apps
@@ -807,10 +815,9 @@ docker run -d --name balancer \
 							style="background-color: rgba(64,64,78,.8); width: 640px; border: 2px solid #666;
 						 	position: absolute; right: 0px; top: 0px; padding: 0 32px 18px;"
 							data-markdown>
-							**Java Tool Plugins**
-							- **Build:** Maven, Gradle, &hellip;
-							- **CI-Server:** Jenkins, TeamCity, &hellip;
-							- **IDEs:** IntelliJ, (Eclipse)
+							**Java-nahe Tools**
+							- **`Dockerfile`-Alternativen:** Paketo.io, jib, s2i (source-to-image), &hellip;
+							- **Update-Management:** Renovate
 						</div>
 						<div style="width: 100%; height: 600px;"/>
 
@@ -878,7 +885,7 @@ docker run -d --name balancer \
 						<h2>Orchestrierung - Docker Compose</h2>
 						<pre><code data-trim class="yml">
 haproxy:
-  image: haproxy:1.5
+  image: haproxy:lts
   ports:
     - 8080:80
   volumes:
@@ -918,14 +925,15 @@ web1:
 					<section>
 						<div class="container" data-markdown>
 							## Docker out of the box
-							##### Pures `localhost`: (bis Docker 1.8)
+							##### Pures `localhost`:
 							- `--link` und Volumes nur auf lokalem Host
 							- Kein cross-host Netzwerk
 
 							##### Add-on Tools
-							- Unübersichtliches, dynamisches Ökosystem   <!-- -->
-							- Sehr oft nur Einzelteile einer Gesamtlösung
-							- Eher fragil; volles Verständnis notwendig
+							- Unübersichtliches, dynamisches Ökosystem. Viele Einzelteile in einer Gesamtlösung,
+							  daher breites Verständnis notwendig.
+							- Platzhirsch: **Kubernetes Distributionen**
+							- Nische: _Docker Swarm_
 						</div>
 					</section>
 
@@ -949,17 +957,15 @@ web1:
 				-->
 
 					<section>
-						<h2>Tools</h2>
+						<h2>Orchestrierungs-Tools</h2>
 
-						<img src="img/logos/mesos_400x400.png" alt="Mesos" class="glow plain" width=200>
-						<img src="img/logos/marathon.png" alt="Marathon" class="glow plain" width=200>
-						<img src="img/logos/aurora_400x400.png"  alt="Aurora" class="glow plain" width=200>
-					  <br>
 						<img src="img/logos/rancher_400x400.png"  alt="Rancher" class="glow plain" width=200>
 						<img src="img/logos/kubernetes.png"  alt="Kubernetes" class="glow plain" width=200>
+					  <br>
+						<img src="img/logos/mesos_400x400.png" alt="Mesos" class="glow plain" width=200>
 						<img src="img/logos/swarm.png"  alt="Docker Swarm" class="glow plain" width=200>
 					  <br>
-						<img src="img/logos/weave.png"  alt="Weaveworks" class="glow plain" width=200>
+						<img src="https://k3s.io/images/logo-k3s.svg"  alt="K3s" class="glow plain" width=200>
 
 						<aside class="notes" data-markdown>
 							- Mesos + Marathon/Aurora
@@ -1008,11 +1014,12 @@ web1:
 						<div class="container">
 							<img class="plain" data-src="img/boot2docker.png" alt="boot2docker logo"/>
 							<div style="float: right; margin-left: 60px; " data-markdown>
-								##### Heute: (Linux container)
-								- boot2docker
+								##### Bis Heute: (Linux container)
+								- Docker Desktop
+								- Docker for Windows WSL
 								- Docker auf Microsoft Azure
 
-								##### Zukunft: (Windows container)
+								##### Ergänzend: (Windows container)
 								- Windows Server Containers
 								- Hyper-V Container
 							</div>
@@ -1040,10 +1047,10 @@ web1:
 								 style="border-left: 5px solid #42affa; margin: 0 120px 0 0">
 								<ul>
 									<li>nur Teil <span class="decent">einer Gesamtlösung</span></li>
-									<li>Dynamisches Umfeld</li>
-									<li>1.x-Technologie <span class="decent">&amp; Folgeprobleme</span></li>
-									<li>Unklare Ausrichtung <br>
-										<span class="decent">➱ Rocket, Open Container, LXD</span></li>
+									<li> <span class="decent">Aktuelle Suche nach</span> Monetarisierung</li>
+									<li><span class="decent">Cloud-native-Technologie</span> ➱ Folgechallenges</li>
+									<li>Aufstrebende Alternativen <br>
+										<span class="decent">➱ OCI, Podman, K8s, LXD, (rkt)</span></li>
 								</ul>
 							</div>
 						</div>
@@ -1282,7 +1289,7 @@ web1:
 			    // Number of milliseconds between automatically proceeding to the
 			    // next slide, disabled when set to 0, this value can be overwritten
 			    // by using a data-autoslide attribute on your slides
-			    autoSlide: 2000,
+			    autoSlide: 000,
 
 			    // Stop auto-sliding after user input
 			    autoSlideStoppable: true,
