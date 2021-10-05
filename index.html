@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Teile und Herrsche - Verteilte Java-Anwendungen mit Docker</title>
+		<title>LT-142 - Container bauen und pflegen</title>
 
 		<meta name="description" content="Eine Einführung in den Einsatz von docker für Java-Anwendungen">
 		<meta name="author" content="Benjamin Schmid, Dr. Ralph Guderlei">
@@ -44,19 +44,11 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 
-<!--
-				<section data-markdown>
-					TODO
-					----
-					- Trademark Hinweise bei den Logofolien aufnehmen
-					- Screen-Recordings der Live-Demos
-					- Live-Demos Seiten als Fragements mit Live-Recordings zu einer Seite zusammenfassen
-				</section>
--->
+
 				<section>
 					<div id="title">
-					<h1 style="margin: 10px">Teile und Herrsche</h1>
-					<h3>Verteilte Java-Anwendungen mit Docker</h3>
+					<h1 style="margin: 10px">LT-142 - Container bauen und pflegen</h1>
+					<h3>Best Practices</h3>
 
 					<!-- Profil-Karten -->
 					<div class="container">
@@ -70,7 +62,7 @@
 											Benjamin Schmid
 										</div>
 										<div class="profile-usertitle-job">
-											Technology Advisor
+											Manager R&I
 										</div>
 									</div>
 							</div>
@@ -78,28 +70,10 @@
 				   				<a href="https://twitter.com/bentolor">@bentolor</a>
 	            			</div>
 						</div>
-					    <div class="profile">
-								<div class="profile-sidebar">
-									<div class="profile-userpic">
-										<img data-src="img/rguderlei.png" class="img-responsive" alt="">
-									</div>
-									<div class="profile-usertitle">
-										<div class="profile-usertitle-name">
-											Dr. Ralph Guderlei
-										</div>
-										<div class="profile-usertitle-job">
-											Technology Advisor
-										</div>
-									</div>
-							</div>
-							<div class="profile-content">
-				   				<a href="https://twitter.com/rguderlei">@rguderlei</a>
-	            			</div>
-						</div>
 					</div>
 					</div>
 
-					<div id="footer">
+					<div id="footer" style="display: none;">
 						<div id="logo">
 							<img src="img/eXXcellent logo-transparent.png" alt="eXXcellent solutions" />
 						</div>
@@ -117,173 +91,32 @@
 					</div>
 				</section>
 
-				<section  data-transition="zoom">
-					<img class="plain" data-src="img/docker-logo-large-dark-horiz-transparent.png" alt="Docker logo" />
 
-					<aside class="notes">
-						Überall hört und liest man von "docker".
-					</aside>
-				</section>
 
-				<section data-transition="zoom">
 
-					<section data-background="https://33.media.tumblr.com/653f26dc9e1a4d9aa9fffacf9d119f00/tumblr_mqycfbnyGH1s7r5iqo1_500.gif"  data-transition="zoom">
-						<!-- via http://youngmunchkin.tumblr.com/post/57238759142 -->
-						<h1>150 Mio. USD Risikokapital</h1>
 
-						<aside class="notes" data-markdown>
-							Insgesamt **150 Mio. USD Risikokapital** konnte das Unternehmen an rund um die Open-Source
-							Systemvirtualisierung einnehmen.
-						</aside>
-					</section>
-
-					<section data-transition="zoom">
-						<div class="fragment grow" style="position: absolute; top: 200px; left: 100px;">
-							<img alt="Red Hat Logo" class="glow plain" style="width:400px;" data-src="https://upload.wikimedia.org/wikipedia/ar/6/6c/RedHat.svg"/></div>
-						<div class="fragment grow"  style="margin-top: -0px;">
-							<img alt="Google Logo" class="glow plain" style="width:400px;" data-src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"/></div>
-						<div class="fragment grow"  style="position: absolute; top: 250px; right: 100px;">
-							<img alt="Amazon Logo" class="glow plain" style="width:400px;" data-src="https://upload.wikimedia.org/wikipedia/commons/6/62/Amazon.com-Logo.svg"/>
-						</div>
-						<div class="fragment grow"  style="margin-top: 250px; ">
-							<img alt="Microsoft Logo" class="glow plain" style="width:400px;" data-src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_(2012).svg"/>
-						</div>
-
-						<div style="font-size: 0.4em;  margin: 20px auto; color: #666;">
-							Alle Warenzeichen und Logos sind Eigentum ihrer jeweiligen Rechteinhaber.
-						</div>
-
-						<aside class="notes" data-markdown>
-							Zu seinen Unterstützern gehört eine ganze Riege namhafter Unternehmen, wie z.B.:
-
-							Red Hat, Google, Amazon
-
-							um ein paar zu nennen.
-
-							Selbst **Microsoft arbeitet inzwischen** mit Docker zusammen,, um die eigentlich auf Linux
-							beheimatete Technologie auch auf Windows &amp; Azure zu portieren!</aside>
-					</section>
-
-					<section>
-						<h2 class="fragment grow highlight-current-blue">Hype?</h2>
-						<p style="text-align: center; color: #aaa; font-style: italic">oder</h2>
-						<h2 class="fragment grow highlight-current-blue">»Wertvolles Werkzeug«?</h2>
-						<div class="fragment"/>
-
-						<aside class="notes" data-markdown>
-							Ist das Docker nur ein Hype oder wirklich ein »Wertvolles Werkzeug«? Dieser Frage möchten
-							wir heute auf den Grund gehen!
-
-							<br> Hallo und Ein herzliches Willkommen zu unsere_ — mein Name ist '...'.
-							Speaker 2:  Mein Name ist Ralph Guderlei ... und gemeinsam wollen wir heute ein bisschen
-							Licht auf das Schlagwort Docker werfen.
-						</aside>
-					</section>
-
-					<section>
-						<h2>Jump into Docker: Live Demo</h2>
-						<div class="fragment compact" style="width: 1000px; margin: auto">
-						<pre><code data-trim class="bash" >
-$ mvn -o package
-$ java -jar target/rest-microservice-1.0.0.jar server
-$ sensible-browser "http://localhost:8080/hello-world"
-</code></pre>
-						<pre><code data-trim class="bash">
-$ docker build -t my/microservice .
-
-$ docker run -d --name web1 my/microservice
-$ docker run -d --name web2 my/microservice
-$ docker run -d --name web3 my/microservice
-
-$ docker pull haproxy:lts
-$ docker run -d --name balancer \
-	--link web1:web1 --link web2:web2 --link web3:web3 \
-	-p 80:80 \
-	-v (pwd)/etc:/usr/local/etc/haproxy:ro \
-	haproxy:lts
-$ sensible-browser "http://localhost:8080/hello-world"
-						</code></pre>
-						</div>
-
-						<aside class="notes sm" data-markdown>
-							Um die Faszination hinter Dockjer etwas plastischer zu gestalten, fangen wir am Besten
-							doch einfach gleich mal mit einem kleinen Beispiel an.
-
-							Starten wir doch mit einem Java-basierten Service.
-
-							Wir haben da schon mal was vorbereitet, das bauen wir mal.
-							Unser Beispiel ist ein kleiner Microservice auf Basis von Dropwizard.
-
-							Zugegebenermassen: So richtig viel macht unser Service nicht. Trotzdem kann ja mal was schief
-							gehen! Darum wollen wir mal zeigen, wie leicht wir mit Docker daraus ein High Availability Cluster
-							bauen können!
-
-							Im ersten schritt "Dockerizen" wir dazu unsere Anwendung. Wie das genau geht, schauen wir
-							uns später noch im Detail an.
-
-							Wir haben unsere Java-Anwendung nun als Docker-Container verpackt. Da wir Ausfallsicherheit
-							haben wollen, starten wir einfach mal drei Instanzen davon.
-							**Dabei müssen wir nichts umkonfigurieren, da diese drei Instanzen in isolierten Container
-							laufen!**
-
-							Um nun die Ausfallsicherheit zu realisieren, greifen wir auf einen fertigen Container
-							für den Loadbalancer HAProxy zurück. Beim Start machen wir dieser nur noch
-							unsere Konfiguriationsdatei und die drei gestarteten Container bekannt!
-
-							Und schon haben wir unseren geclusterten "Hochverfügbarkeits"-Cluster deployed!
-						</aside>
-					</section>
-
-					<section data-background="https://media.giphy.com/media/itDBteCsTFSVO/giphy.gif">
-						<aside class="notes" data-markdown>
-							Und schon haben wir unseren geclusterten "Hochverfügbarkeits"-Cluster deployed!
-
-							- Wir mussten nichts zusätzlich installieren
-							- Schnell gestartet
-							- Ohne unser Anwendung anpassen zu müssen
-							- Portabel: Könnte so genaus auf Produktion gehen!
-						</aside>
-					</section>
-
-				</section>
-
-				<!--
-				#######################################################################################################
-					Docker in a nutshell
-				#######################################################################################################
-				-->
 
 				<section>
-
-					<section>
-						<h3>Inhaltsverzeichnis</h3>
-
-					    <div id="table-of-contents"></div>
-					</section>
-
 					<section>
 						<h2 class="toc-element">Docker in a nutshell</h2>
 
 						<div class="container">
 							<ul class="fragment fade-out" data-fragment-index="6">
 								<li>
-									<strong class="fragment highlight-blue" data-fragment-index="1">
+									<strong  data-fragment-index="1">
 										Isolierte Prozessausführung</strong> (Sandbox)
 										<br> auf Basis von »Linux Containers (LXC)«</li>
 								<li>
-									Wesentlich <strong class="fragment highlight-blue" data-fragment-index="2">
-										effizienter</strong> als VMs/Hypervisoren</li>
+									Wesentlich effizienter als VMs/Hypervisoren</li>
 								<li>
-									<strong  class="fragment highlight-blue" data-fragment-index="3">
+									<strong  class="" data-fragment-index="3">
 										Portables Format</strong> für Container mit
-										<strong class="fragment highlight-blue" data-fragment-index="3">Versionierung
+										<strong class="" data-fragment-index="3">Versionierung
 										</strong></li>
 								<li>
-									<strong  class="fragment highlight-blue" data-fragment-index="4">
-										Leichtgewichtige</strong> Laufzeit- und Packaging-Tools </li>
+									Leichtgewichtige Laufzeit- und Packaging-Tools </li>
 								<li>
-									<strong  class="fragment highlight-blue" data-fragment-index="5">
-										Cloud-Repository</strong> für Container-Vorlagen </li>
+									Cloud-Repository für Container-Vorlagen </li>
 							</ul>
 						</div>
 
@@ -297,54 +130,6 @@ $ sensible-browser "http://localhost:8080/hello-world"
 						  background-color: rgba(66, 175, 250, 1);">
 							**Build** Once, **Configure** Once and **Run Anywhere**
 						</div>
-					</section>
-
-					<section>
-						<h3>Grundlegende Begriffe</h3>
-
-						<div>
-							<img data-src="img/icon-layers.png" alt="Image and Layers" class="floaticon plain" />
-							<p class="floaticon">
-								<strong>Image:</strong> Paketierte Zusammenstellung von Dateien.
-								Damit eine <em>schreibgeschützte Blaupause</em> für eine Systemumgebung.
-							</p>
-							<div class="fragment">
-								<img data-src="img/icon-container.png" alt="Container" class="floaticon plain" />
-								<p class="floaticon">
-									<strong>Container:</strong> Eine unabhängige Systemumgebung
-									basierend auf einem Image
-								</p>
-							</div>
-
-							<div class="fragment">
-								<img data-src="img/icon-repo.png" alt="Repository" class="floaticon plain" />
-								<p class="floaticon">
-									<strong>Repository:</strong> Ein Sammlung von Images auf dem lokalen Docker oder
-									zentralen Registry Server
-								</p>
-							</div>
-						</div>
-
-						<aside class="notes" data-markdown>
-						</aside>
-					</section>
-
-					<section>
-						<h3>Docker Komponenten</h3>
-
-						<div>
-							<img class="plain" data-src="img/docker-components.png" style="height: 600px;"/>
-
-						</div>
-
-						<aside class="notes" data-markdown>
-							- Auf der Host-Machine läuft ein Daemon.
-							  - Dieser verwaltet sowohl die laufenden Container, als auch die Images.
-							  - Der Daemon ist also Zuständig dafür, Container-Instanzen anzulegen, starten und zu
-								stoppen
-							- Über ein CLI Tool kann der Docker Dienst (remote) gesteuert werden.
-							- Aus dem Cloud-Repository lassen sich Images abholen
-						</aside>
 					</section>
 
 					<section>
@@ -368,52 +153,38 @@ $ sensible-browser "http://localhost:8080/hello-world"
 						</aside>
 					</section>
 
+
+
+				</section>
+
+				<section>
+					<h2>(Some) Key Objectives</h2>
+					<h4 style="margin: -35px 0 50px 0;">für die Pflege von Container Images</h4>
+
+					<div data-markdown >
+						1. Performance & Size
+
+						1. Security & Update-Management
+
+						1. Diagnostik & Robustheit
+						
+						1. Einhaltung von Best Practices  
+
+						1. Sicherer Betrieb
+
+					</div>
+					<aside class="notes" data-markdown>					
+					</aside>
+
+				</section>
+
+
+				<section>
 					<section>
-						<h3>Erstellen von Images </h3>
-
-						<div class="container" style="max-width: 80%;">
-							<p>
-
-							</p>
-							<p data-markdown >
-								1. **Manuell:** *Commit* eines Containers
-								2. **Automatisiert:** via `Dockerfile`
-							</p>
-							<p data-markdown  class="decent tgap">
-								In der Regel: Automatisiert, aufbauend auf     <!--  -->
-								einem via `docker pull` bezogenem Base-Image
-							</p>
+						<div class="pc90 container" data-markdown>
+							# Image-Diät
 						</div>
-
-						<aside class="notes" data-markdown>
-							- Images lassen sich auf zwei Arten erstellen:
-							   - Commit eines Containers
-							   - Generiert via Dockerfile
-							- in der Regel aber: Automatisierte Erstellung anhand des «Build-Files»: `Dockerfile`
-						</aside>
-					</section>
-
-					<section data-background="img/docker-lib-extract.png">
-
-						<div id="baseimages">
-							<h4 style="color: #333;">Base Images</h4>
-
-							<div data-markdown>
-							- [~100 offizielle Images](https://hub.docker.com/explore/)
-							- 100.000+ Images insgesamt
-							- 200+ Millionen Downloads
-							</div>
-						</div>
-
-
-						<aside class="notes" data-markdown>
-							- drei Klassen:
-							  - Betriebsysteme
-								- Laufzeitumgebungen (Java, Ruby)
-								- Anwendungen (Datenbanken, Wordpress)
-							- untrusted, Signatur-Infrastruktur im Aufbau
-						</aside>
-					</section>
+					</section data-markdown>
 
 					<section>
 						<h3>Images bauen: <code>Dockerfile</code></h3>
@@ -453,131 +224,6 @@ ENTRYPOINT java -jar app.jar server
 						</aside>
 					</section>
 
-				</section>
-
-				<!--
-				#######################################################################################################
-					Hands on Docker
-				#######################################################################################################
-				-->
-
-				<section>
-					<h1 class="toc-element">Hands on Docker</h1>
-				</section>
-
-				<section data-transition="fade" data-background="#222">
-					<div class="pc90 container" data-markdown>
-						#### Neues Image erstellen
-
-						Auf Basis unseres `Dockerfile` erzeugen wir unser Image:
-
-						```
-						docker images
-						docker build -t my/dockerapp:latest .
-						docker images
-						```
-
-						Dabei sehen wir wie die Schritte einzeln abgearbeitet werden; bei jedem der Schritte
-						entsteht ein neuer Layer. Mehr dazu später.
-					</div>
-
-					<aside class="notes" data-markdown>
-						- Welche Images sind da?
-						- `Dockerfile` -> Neues Image
-					</aside>
-				</section data-markdown>
-
-				<section data-transition="fade" data-background="#222">
-					<div class="pc90 container" data-markdown>
-						#### Container erstellen & starten
-
-						Nun starten einen neuen (anonynmen) Container auf Basis des Images: Einmal interaktiv,
-						einmal als Daemon
-
-						```
-						docker run -it my/dockerapp
-						[ctrl-c]
-						docker run -d my/dockerapp
-						```
-					</div>
-
-					<aside class="notes" data-markdown>
-						- Wir _legen_ neuen Container via `docker run` an
-						- Das startet ihn auch gleich.
-						- Dank `-it` interaktiv im Vordegrund
-					</aside>
-				</section data-markdown>
-
-				<section data-transition="fade" data-background="#222">
-					<div class="container pc90" data-markdown>
-						#### Container managen
-						Nun schauen wir mal was so los ist. Wir die eingangs gestarteten Container laufen noch,
-						welche wir erst mal unsanft killen.
-
-							docker ps
-							docker kill balancer web1 web2 web3
-							docker ps
-
-						Regulär stoppt man Container aber höflich mit `docker stop`. Wieder starten über
-						`docker start` &hellip; nicht ~~`docker run`~~ .
-
-							docker stop name
-							docker ps
-							docker ps -as
-							docker start name
-
-					</div>
-
-					<aside class="notes" data-markdown>
-						- Wir schauen uns die laufenden Container an.
-						- Wir stoppen wieder unseren Container:
-							- `ps` zeigt ihn nicht mehr.
-							- mit `ps -as` sehen wir auch die gestoppten.
-							- Erneutes starten erfolgt dagegen via `docker start`.  nicht ~~`docker run`~~
-							- **Achtung:** auch diese belegen Platz!
-					</aside>
-				</section data-markdown>
-
-				<section data-transition="fade" data-background="#222">
-					<div data-markdown class="container pc90">
-						#### Diagnostik von Container
-						Unsere Container laufen im Hintergrund. Wie kommen wir an Infos,
-						wenn mal etwas nicht funktioniert?
-
-							docker inspect name | grep IP
-							sensible-browser "http://ip:8080/hello-world"
-
-							docker logs name
-							docker exec -it name /bin/bash
-					</div>
-
-					<aside class="notes" data-markdown>
-						Unsere Container laufen. Wie bekommen wir Infos?
-
-						1. Auf unserem Container läuft ja eine Web-Anwendung auf Port 8080, die wollen wir mal
-						ausprobieren.
-						2. Über `docker inspect` bekommt man jede Menge Infos.
-						3. Mit `docker logs` die Ausgaben.
-						4. Oder wir können mit `docker exec` einen Prozess im Kontext des Container starten
-
-						Fazit:
-						- `logs` zeigt uns die Konsolenausgaben
-						-  `exec` erlaubt in den Container einzutauchen; z.B. eine bash Shell, um sich umzuschauen
-					</aside>
-				</section>
-
-				<!--
-				#######################################################################################################
-					Docker advanced
-				#######################################################################################################
-				-->
-
-				<section>
-
-					<section>
-						<h1 class="toc-element">Docker advanced</h1>
-					</section>
-
 					<section>
 						<!-- <h3>Layers &amp; Union File System</h3> -->
 						<img data-src="img/layers.png" alt="Docker Layers" class="plain"
@@ -605,91 +251,299 @@ ENTRYPOINT java -jar app.jar server
 							- Dockerfile: Jeder Schritt = **neuer Layer** ➱ `docker history`
 							- **Versionierung:** Layer-ID = Container/Image ID ➱ `ac408c338`
 						</div>
+					</section>					
+
+
+					<section data-background-video="img/docker-layers.mp4">
 					</section>
 
-					<section>
-						<h2>Data Volumes</h2>
-
-						<div class="container">
-							<p>
-								<strong>Datenhaltung</strong> unabhängig vom Container-Lebenszyklus. <br>
-								<span class="decent">Überlebt:</span> Löschen &amp; Updates.
-								<span class="decent">Erlaubt:</span> Sharing.
-							</p>
-
-							<div data-markdown class="fragment decent compact tgap" style="font-size: 80%">
-								Option 1: _Container Volumes_
-
-								    docker create -v /mydata --name mydata openjdk:slim /bin/true
-								    docker run -d --volumes-from mydata my/dockerapp
-
-								Option 2: _Lokale Verzeichnisse_
-
-								    docker run -v $(pwd)/etc:/usr/local/etc:ro haproxy:lts
-							</div>
+					<section> 
+						<div data-markdown="">
+							### Weitere Mittel Gewicht zu verlieren…
+							* Größe des Basis-Image, z.B. **Google Project "Distroless"**   <!-- -->
+							  `openjdk:slim` → 426 MB    <!-- -->
+							  `gcr.io/distroless/java:11` → 228MB
+							* Tools wie `docker-slim` oder  `jlink`
+							* Layers zusammenfassen mit `docker build --squash …`
+							* **Multistage Builds** für _Build_- vs. _Run_-Container
 						</div>
-						<aside class="notes" data-markdown>
-							Data volumes are designed to persist data, independent of the container's life cycle.
-
-							- Zustandslose Services trivial, wie sieht es mit Datenbanken aus?
-							- Umgang mit persistenten Daten: Volumes
-							- Beispiel: Update einer Datenbank, Daten sollen erhalten werden
-
-							If you have some persistent data that you want to share between containers, or want to
-							use from non-persistent containers.
-
-							Let's create a new named container with a volume to share. It reuses the `openjdk:slim` image
-							so that all containers are using layers in common, saving disk space.
-						</aside>
 					</section>
 
+				</section>
+
+
+				<section>
 					<section>
+						<div class="pc90 container" data-markdown>
+							# Sicher & Aktuell
+						</div>
+					</section data-markdown>
 
-						<div class="container">
-							<h2>Container verknüpfen</h2>
+					<section >
+						<div class="pc90 container" data-markdown>
+							## Neue Challenges
 
-							<div data-markdown style="margin: 40px 0 0 0; width: 900px;">
+							Als Entwickler / DevOps Engineer Pflege-Verantwortung für **alle** Bestandteile des Images.
+							→ Prozess-Behandlung notwendig
+
+							* Regelmäßige (Security)-Releases
+							* (Daily) Dependency Scanning   <!-- -->
+							  z.B. via `renovatebot` oder _Gitlab SAST_
+							* (Daily) Container Scanning mit `trivy` oder `grype`
+							* Sorgfältige Auswahl des Basis-Image → <!-- -->
+							  _Weniger ist mehr!_
+						</div>
+					</section>
+
+					<section data-background-video="img/trivy.mp4" >
+					</section>
+				</section>					
+
+
+				<section>
+					<section>
+						<div class="pc90 container" data-markdown>
+							# Diagnostik &amp; Robustheit
+						</div>
+					</section data-markdown>
+
+					<section >
+						<div class="container" data-markdown>
+							## Logging & Konfiguration
+							* Logging per Default _unbuffered_ nach `STDOUT` und `STDERR`
+							* Abwägung: Logging als JSON
+							* Konfiguration über Umgebungsvariablen (zur Not: Volumes) bzw. _secrets_ und _configs_
+							```shell
+							$ docker run --env VAR1=val1 --env VAR2=val2  …
+							$ docker run --env-file env.list  …
 							```
-							docker run -d --name web1       my/dockerapp
-							docker run -d --link web1:web1  haproxy
-							```
-							</div>
 
-							<div data-markdown style="width: 800px;" class="container">
-							_web1_ wird damit in _haproxy_ verfügbar via
-							- Umgebungsvariablen: `WEB1_PORT`
-							- IP &amp; Hostnamen: `/etc/hosts`
-							</div>
+						</div>
+					</section>
+
+					<section >
+						<div class="container" data-markdown>
+							## Datenhaltung
+							* Keine Datenhaltung im Container  <!-- --> 
+							  → Container sind Wegwerfware & zustandslos
+							* Datenhaltung exklusiv in Volumes oder Services
+							* Idealfall: Filesystem des Containers ist r/o:
+							```
+							docker run … --read-only --tmpfs /run:rw  myservice
+							```
+						</div>
+					</section>
+
+					<section >
+						<div class="container " data-markdown>
+							## Health-Checks
+
+							Endpunkte für Health (`/health`), Ready (`/ready`)
+							und ggf. Metriken (`/metrics`) anbieten.
+
+							Anbindung z.B. im `Dockerfile`:
+```Docker
+HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
+            --start-period=5s --retries=3 \   <!-- -->
+	    CMD curl -f http://localhost:8080/v1/health || exit 1
+```
+						</div>
+					</section>
+
+				</section>
+
+
+				<section>
+					<section>
+						<div class="pc90 container" data-markdown>
+							# Angreifer zähmen!
+						</div>
+					</section data-markdown>
+
+					<section >
+						<div class="container" data-markdown>
+							## Muss es immer `root` sein?
+							
+							* Docker-Daemon: völlige Kontrolle über den Host 
+							* Container: per Default viele Privilegien
+							
+							Um den Impact einer RCE zu begrenzen, Applikationen im Container mittels `USER` 
+							als _nicht-privilegiert,  nicht `sudo`-fähig_ betreiben:
+
+							```
+							FROM alpine
+							# Create user and set ownership and permissions as required
+							RUN adduser -D myuser && chown -R myuser /myapp
+							USER myuser
+							ENTRYPOINT ["/myapp/app"]
+							```
+						</div>
+					</section>
+
+					<section >
+						<div class="container pc90" data-markdown>
+							## Augen auf bei der Image-Wahl!
+							* _verfified_ und _official_?
+							* Noch supported & regelmäßige Security Updates?
+							* ggf. `Dockerfile` der Quelle geprüft?	
+							* Namen & Tags sind Schall & Rauch!  <!-- -->
+							  → Trusted Sourcen oder SHA1 als Referenz   <!-- -->
+							  → `latest` kann Pitfall sein
+						</div>
+					</section>
+
+ 					<section >
+						<div class="pc90 container" data-markdown>
+							## PID 1, Signale & Zombie-Prozesse
+							* Sterben Kind-Prozesse im Container, müssen diese abgeräumt werden → _init_-Prozess
+							   * `docker run --init …`
+							   * Nur ein Prozess direkt als `ENTRYPOINT`
+							   * Init-System wie _tini_ einbinden
+							* Dieser Prozess sollte auch Signale wie `SIGTERM` & Co. behandeln!
+							* Ideal: Ein Prozess pro Image
+						</div>
+					</section>
+
+
+
+					<section >
+						<div class="pc90 container" data-markdown>
+							## Weitere Best-Practices
+							* `Dockerfile` linten, z.B. via https://hadolint.github.io/
+							* `.dockerignore` nutzen; `COPY` over `ADD` bevorzugen
+							* Docker Build-Cache verstehen, nutzen & steuern
+							* **Immutable** is key
+							* Konfiguration _vollständig_ extern halten
+						</div>
+					</section>
+
+
+
+					<section data-background="img/spark.jpg" data-background-transition="zoom">
+						<div class="container"
+							style="background-color: rgba(64,64,64,.8); border: 2px solid #555;
+						 	position: absolute; left: 0px; padding: 0 32px 18px; "
+							data-markdown>
+							**Microservice Frameworks**
+							- **Quarkus.io**
+							- **Micronaut.io**
+							- **Helidon**
+							- Spring Fu 
+							- Ktor
+							- Spark Framework
+							- Dropwizard
+							- Spring Boot
+							- Vert.x
 						</div>
 
 						<aside class="notes" data-markdown>
-							Erzeugt Umgebungsvariablen wie `DB_PORT`, host-Einträge, ermöglicht Zugriffe auf
-							Netzwerk-Ports.
-							Typisches Szenario: Zugriff auf Datenbanken.
+
+							- Spring Fu 
+							- Ktor
+							- Spark: Micro-Framework
+							- Dropwizard: Best of JEE
+							- Spring Boot: Stand-alone Apps
+							- Vert.X: Reactive Apps
 						</aside>
 					</section>
 
-					<section>
-						<h2>Einstiegs-Demo revisited</h2>
-
-						<pre style="width: 1000px; margin: auto"><code class="bash">docker build -t my/microservice
-
-docker run -d --name web1 my/microservice
-docker run -d --name web2 my/microservice
-docker run -d --name web3 my/microservice
-
-docker run -d --name balancer \
-    --link web1:web1 --link web2:web2 --link web3:web3 \
-    -p 80:80 \
-    -v (pwd)/etc:/usr/local/etc/haproxy:ro \
-    haproxy:lts</code></pre>
+					<section data-background="img/pom-maven.jpg" data-background-transition="zoom">
+						<div class="container decent"
+							style="background-color: rgba(64,64,78,.8); width: 640px; border: 2px solid #666;
+						 	position: absolute; right: 0px; top: 0px; padding: 0 32px 18px;"
+							data-markdown>
+							**`Dockerfile`-Alternativen:** 
+							
+							Paketo.io, jib, s2i (source-to-image), &hellip;
+						</div>
+						<div style="width: 100%; height: 600px;"/>
 
 						<aside class="notes" data-markdown>
-						    ...und damit haben wir alle Elemente aus der Eingangs-Demo kennen gelernt.
+							- Maven: 4 plugins
+							- CI-Server: Kommt eigentlich überall
+						    - IDE Integration: Eclipse "Docker Explorer" nur angekündigt
 						</aside>
 					</section>
 
+
+
+
+				</section>
+
+
+
+
+				<section>
 					<section>
+						<div class="pc90 container" data-markdown>
+							# «Ja, wo laufen sie denn?»
+						</div>
+					</section>
+
+					<section >
+						<div class="container" data-markdown>
+							## Docker Daemon & `docker.sock`
+							Zugriff auf `docker.socket` ist effektiv voller root-Zugriff
+
+							* möglichst Zugriff _nur_ für `127.0.0.1` und _nur_ für `root`
+							* Wenn's sein muss: TCP-Zugriff stabil absichern!
+							* Alternative _podman_ für Rootless-Betrieb
+						</div>
+					</section>
+
+					<section >
+						<div class="container pc90" data-markdown>
+							## Privilegien & Limits
+							
+							By default weitreichende Privilegien & _Capabilities_ der Container über den Host!
+							Zusätzliches `--privileged` ist quasi völlige Sandbox-Aufgabe.
+
+							→ Es empfiehlt sich daher Container stets 
+							mit **minimalen Capabilities** und **Ressource-Limits** zu starten:
+
+							```bash
+							$ docker run --cap-drop all --cap-add … \
+							             --security-opt="no-new-privileges" \
+										 --memory="1g" --memory-swap="1g" \ 
+										 --cpus="2.5" --cpu-shares="2048"
+							```
+						</div>
+					</section>
+
+					<section >
+						<div class="container" data-markdown>
+							## `docker-bench` kann Tipps geben
+							Im laufenden Betrieb z.B. Tools vie Docker-Bench nutzen, 
+							die über Heuristiken Empfehlungen für das Hardening anbieten
+
+							```bash
+							$ sudo docker run --rm --net host --pid host \
+										--userns host --cap-add audit_control \
+										-v /etc:/etc:ro \
+										-v /lib/systemd/system:/lib/systemd/system:ro \
+										-v /usr/bin/containerd:/usr/bin/containerd:ro \
+										-v /usr/bin/runc:/usr/bin/runc:ro \
+										-v /usr/lib/systemd:/usr/lib/systemd:ro \
+										-v /var/lib:/var/lib:ro \
+										-v /var/run/docker.sock:/var/run/docker.sock:ro \
+										--label docker_bench_security \
+										docker/docker-bench-security
+							```
+						</div>
+					</section>
+
+					<section data-background-video="img/docker-bench.mp4">
+					</section>
+				</section>
+
+				<section>
+					<div class="pc90 container" data-markdown>
+						# Vielen Dank!
+					</div>
+				</section>
+
+
+<!-- 				<section>
 						<h2>Docker Kommandos</h2>
 
 						<div data-markdown style="font-size: 0.6em; float: left; margin-top: -32px;">
@@ -732,507 +586,11 @@ docker run -d --name balancer \
 
 							Erwähnenswert ist z.B. noch `docker diff`. Eines der leistungsfähigen Aspekte von Docker.
 						</aside>
-					</section>
+					</section>-->
 
-				</section>
 
 
-				<!--
-				#######################################################################################################
-					Docker & Java
-				#######################################################################################################
-				-->
 
-				<section>
-
-					<section class="toc-element">
-						<h1>Docker &amp; Java</h1>
-					</section>
-
-					<section>
-						<div class="container">
-
-							<h3>Anwendungsfälle</h3>
-							<div data-markdown>
-								- **Entwicklung**:
-								  - Lokale, isolierte & portable Umgebung
-								  - Infrastruktur analog zu Produktion
-								  - fixe Versionen für Tools & Laufzeitumgebungen
-								- **CI-Server:** Tests in _isolierten_ Referenzumgebungen
-								- **Betrieb**:
-								  - einfaches Deployment
-								  - Resourcenschonender Parallel-Betrieb vieler Instanzen
-								- **Architektur**: Microservice als Uberjar statt Appserver
-							</div>
-
-						</div>
-
-						<aside class="notes" data-markdown>
-							#### Entwicklungsumgebung:
-
-							- run multiple development environments from the same
-								host that each have unique software, operating
-								systems, and configurations
-							- set up local development environments that are exactly like a live server
-							- allow anyone to work on the same project with the exact same settings
-
-							- Docker als Deployment-Artefakt
-							- einfache Automatisierung möglich
-							- daraus folgen die Anwendungsfälle ...
-						</aside>
-					</section>
-
-					<section data-background="img/spark.jpg" data-background-transition="zoom">
-						<div class="container"
-							style="background-color: rgba(64,64,64,.8); border: 2px solid #555;
-						 	position: absolute; left: 0px; padding: 0 32px 18px; "
-							data-markdown>
-							**Microservice Frameworks**
-							- **Quarkus.io**
-							- **Micronaut.io**
-							- **Helidon**
-							- Spring Fu 
-							- Ktor
-							- Spark Framework
-							- Dropwizard
-							- Spring Boot
-							- Vert.x
-						</div>
-
-						<aside class="notes" data-markdown>
-
-							- Spring Fu 
-							- Ktor
-							- Spark: Micro-Framework
-							- Dropwizard: Best of JEE
-							- Spring Boot: Stand-alone Apps
-							- Vert.X: Reactive Apps
-						</aside>
-					</section>
-
-					<section data-background="img/pom-maven.jpg" data-background-transition="zoom">
-						<div class="container decent"
-							style="background-color: rgba(64,64,78,.8); width: 640px; border: 2px solid #666;
-						 	position: absolute; right: 0px; top: 0px; padding: 0 32px 18px;"
-							data-markdown>
-							**Java-nahe Tools**
-							- **`Dockerfile`-Alternativen:** Paketo.io, jib, s2i (source-to-image), &hellip;
-							- **Update-Management:** Renovate
-						</div>
-						<div style="width: 100%; height: 600px;"/>
-
-						<aside class="notes" data-markdown>
-							- Maven: 4 plugins
-							- CI-Server: Kommt eigentlich überall
-						    - IDE Integration: Eclipse "Docker Explorer" nur angekündigt
-						</aside>
-					</section>
-
-					<section>
-						<h2>Best Practices</h2>
-						<h4 style="margin: -35px 0 50px 0;">für Docker Images</h4>
-
-						<div data-markdown>
-							- **Immutable infrastructure**
-							- Konfiguration extern halten
-							- Kein blindes `docker pull`
-							- Ein Prozess pro Image
-							- `docker exec` statt ssh-Server
-							- Logging nach `STDOUT`/`STDERR`
-						</div>
-
-						<aside class="notes" data-markdown>
-							- Konfiguration; externe Volumes nutzen
-							- Immutable: Keine Änderung nach docker build; keine Log-Files im Container, Footprint
-							gering halten. Idee: Container == Wegwerfgut.
-							- no, you will not use a community-contributed image without looking at what it will do
-							- Versionierung ermöglicht einfaches Rollback
-						</aside>
-					</section>
-
-					<!-- <section>
-						<h2>Docker-freundliche Java-Anwendungen</h2>
-						<ul>
-							<li>Paketieren als uber jar</li>
-							<li>Ausführbar mit <code>java -jar myapp.jar</code></li>
-							<li>Konfiguration per Environment-Variablen</li>
-							<li>Embedded server (jetty, undertow, vert.x, ...)</li>
-							<li>Logging nach STDOUT/STDERR</li>
-						</ul>
-						<aside class="notes" data-markdown>
-							- uberjar -> wenig zu kopieren
-							- mit einem Kommando ohne viele Parameter ausführbar -> wenig Fehlermöglichkeiten
-							- Konfig via environment -> einfache Konfiguration über Container-Runtime
-							- embeddesd Server -> keine aufwändige Konfiguration des Containers
-							- logging nach STDOUT -> docker logs
-						</aside>
-					</section> -->
-
-
-				</section>
-
-				<!--
-				#######################################################################################################
-					Orchestrierung / Clustering
-				#######################################################################################################
-				-->
-				<section>
-					<section class="toc-element">
-						<h1>Docker Distributed</h1>
-					</section>
-
-					<section>
-						<h2>Orchestrierung - Docker Compose</h2>
-						<pre><code data-trim class="yml">
-haproxy:
-  image: haproxy:lts
-  ports:
-    - 8080:80
-  volumes:
-    - ./etc/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
-  links:
-    - web1
-    - web2
-    - web3
-
-web1:
-  image: exxcellent/docker_talk
-						</code></pre>
-					</section>
-
-					<section style="background: rgba(0,0,0,.6)"
-						data-background="img/blades.jpg"
-						data-background-transition="zoom">
-
-						<h2>Cluster-Betrieb</h2>
-						<ul>
-							<li>Verteilung &amp; Scheduling</li>
-							<li>Service Discovery</li>
-							<li>Load Balancing </li>
-						</ul>
-						<aside class="notes" data-markdown>
-							Aus einem mach viele
-							- bisher auf einen Host beschränkt
-							- verteilte Anwendung -> viele Hosts
-
-							Wenn man mehrere Rechner hat kommt man zu einer Reihe von Problemen:
-							- wie verteilt man die Anwendung?
-							- woher weiß man, auf welchem Rechner eine Anwendung/Service laufen?
-							- wie wird die Last auf die einzelnen Instanzen verteilt?
-						</aside>
-					</section>
-
-					<section>
-						<div class="container" data-markdown>
-							## Docker out of the box
-							##### Pures `localhost`:
-							- `--link` und Volumes nur auf lokalem Host
-							- Kein cross-host Netzwerk
-
-							##### Add-on Tools
-							- Unübersichtliches, dynamisches Ökosystem. Viele Einzelteile in einer Gesamtlösung,
-							  daher breites Verständnis notwendig.
-							- Platzhirsch: **Kubernetes Distributionen**
-							- Nische: _Docker Swarm_
-						</div>
-					</section>
-
-					<!--
-					<section>
-						<div class="container sm"  data-markdown>
-							## Übersicht Ökosystem
-
-							| Kategorie          | Tools |
-							|--------------------|-------|
-							| Container/Host OS  | CoreOS, RancherOS, Snappy Ubuntu, ...   |
-							| Config Mgmt.  	 | Puppet, Chef, Ansible, Capistrano, ...  |
-							| Container Grouping | Docker Compose, Kubernetes, Maestro, crane |
-							| Image Registry     | Docker Distribution, Artifactory, ...  |
-							| Networking         | Weave, Flannel, Skydock, ... |
-							| Service Discovery  | etcd, Consul, Zookeeper, ... |
-							| Scheduler          | fleet, Marathon/Mesos, Docker Swarm |
-							| Cluster Mgmt.      | Shipyard, MaestroNG, **Rancher** |
-						</div>
-					</section>
-				-->
-
-					<section>
-						<h2>Orchestrierungs-Tools</h2>
-
-						<img src="img/logos/rancher_400x400.png"  alt="Rancher" class="glow plain" width=200>
-						<img src="img/logos/kubernetes.png"  alt="Kubernetes" class="glow plain" width=200>
-					  <br>
-						<img src="img/logos/mesos_400x400.png" alt="Mesos" class="glow plain" width=200>
-						<img src="img/logos/swarm.png"  alt="Docker Swarm" class="glow plain" width=200>
-					  <br>
-						<img src="https://k3s.io/images/logo-k3s.svg"  alt="K3s" class="glow plain" width=200>
-
-						<aside class="notes" data-markdown>
-							- Mesos + Marathon/Aurora
-							- Kubernetes
-							- Rancher
-							- Docker Machine/Compose/Swarm (BETA)
-							- Weaveworks
-						</aside>
-					</section>
-
-					<section data-background-video="video/rancher-demo.webm" data-state="webm-video">
-	        </section>
-
-					<section>
-						<h2>Beispiel - verteiltes System</h2>
-						<img src="img/verteilt.png" class="plain" width="600">
-						<aside class="notes" data-markdown>
-							Vereiltes System aus
-							- load balancer 1x
-							- web/rest-Knoten 1..n
-							- Message Queue 1x
-							- Worker 1..m
-							- Datenbank 1x
-
-							Jeder Kasten ein Docker-Container:
-							- Rot: leicht skalierbar, gut im Cluster zu verteilen
-							- Grün: eher ausserhalb wegen Erreichbarkeit (LB) oder Datenhaltung (DB)
-						</aside>
-					</section>
-				</section>
-
-				<!--
-				#######################################################################################################
-					Hype vs. Potential
-				#######################################################################################################
-				-->
-
-				<section>
-					<section class="toc-element">
-						<h1>Hype vs. Potential</h1>
-					</section>
-
-					<section>
-						<h2>Docker &amp; Windows</h2>
-
-						<div class="container">
-							<img class="plain" data-src="img/boot2docker.png" alt="boot2docker logo"/>
-							<div style="float: right; margin-left: 60px; " data-markdown>
-								##### Bis Heute: (Linux container)
-								- Docker Desktop
-								- Docker for Windows WSL
-								- Docker auf Microsoft Azure
-
-								##### Ergänzend: (Windows container)
-								- Windows Server Containers
-								- Hyper-V Container
-							</div>
-						</div>
-
-						<aside class="notes" data-markdown>
-							- Einstieg auch auf Windows: boot2docker sehr komfortabel. Startet eine Virtualbox in
-							  welcher die Container laufen.
-							- Nicht auf Linux beschränkt. Microsoft arbeitet bereits eng mit Docker zusammen:
-							    - Ein windows Docker client gibt es bereits: Deployment von Linux VMs
-								- Auf Azure kann man Linux Container starten
-								- Docker-Anbindung an Windows-Server-Containern und Hyper-V-Containern auf dem Weg
-						</aside>
-					</section>
-
-
-					<section>
-						<div class="container">
-							<div style="text-align: right; margin: 0 40px; float: left; margin-top: 140px ">
-								<h2 class="emphasize">Status </h2>
-								<h5 style="margin-top: -30px; color: #ccc;text-align: right;">von Docker</h5>
-							</div>
-
-							<div class="container"
-								 style="border-left: 5px solid #42affa; margin: 0 120px 0 0">
-								<ul>
-									<li>nur Teil <span class="decent">einer Gesamtlösung</span></li>
-									<li> <span class="decent">Aktuelle Suche nach</span> Monetarisierung</li>
-									<li><span class="decent">Cloud-native-Technologie</span> ➱ Folgechallenges</li>
-									<li>Aufstrebende Alternativen <br>
-										<span class="decent">➱ OCI, Podman, K8s, LXD, (rkt)</span></li>
-								</ul>
-							</div>
-						</div>
-
-						<aside class="notes" data-markdown>
-							- »Let’s Dockerize everything« ➱ ziemlich wild & übermütig
-							- Brauche ich Docker?
-								- Signifikante Vorteile von Container/speziell Docker?
-								- Habe ich technische Ressourcen für komplexe, ungelöste Probleme?
-							- Unklare Ausrichtung Docker führt zu Alternativen
-						</aside>
-					</section>
-
-					<section>
-						<div class="container">
-							<div style="text-align: right; margin: 0 40px; float: left; margin-top: 140px ">
-								<h2 class="emphasize">Fragen, </h2>
-								<h5 style="margin-top: -30px; color: #ccc;">die sich durch Docker ergeben</h5>
-							</div>
-
-							<div class="container"
-								 style="border-left: 5px solid #42affa; margin: 0 120px 0 0">
-								<ul>
-									<li>Nachvollziehbarkeit
-										<span class="decent"><br>&amp; Delivery Model</span></li>
-									<li>Datenhaltung</li>
-									<li>Zuständigkeiten</li>
-									<li>Security <span class="decent">(root, Patches)</span></li>
-								</ul>
-							</div>
-						</div>
-
-						<aside class="notes" data-markdown>
-							- Delivery Model: Binary Blob oder Dockerfile? Wie nachvollziehbar?
-							- Datenhaltung: Kein Koch-Rezept hier. Fokus = Immutable infrastructure
-							- Docker images == platform-specific binaries
-							- Zuständigkeit: Operations oder Developer
-							- Security
-							    - docker === root; normalerweise daher auch immer `sudo docker`
-							    - Gestackte Images -> Viele ungeupdate Basisimages
-							    - (Security) Patch Strategie & Support
-						</aside>
-					</section>
-
-					<section>
-						<h2>Potential Docker</h2>
-						<div class="container">
-
-						<div class="twocol" style="margin: 0 0 0 32px;">
-							<img data-src="img/docker-benefits-build.png" alt="Build Umgebung" class="floaticon plain" />
-							<p class="floaticon">
-								<strong>Automatisierung</strong>
-								<span class="decent sm">Provisioning,&nbsp;Config,&nbsp;Delivery</span>
-							</p>
-
-							<img data-src="img/docker-benefits-nosetup.png" alt="Kein Setup" class="floaticon plain" />
-							<p class="floaticon tgap">
-								<strong>Immutability</strong><br>
-								<span class="decent sm">Umgebung = Code. Disposable</span>
-							</p>
-						</div>
-						<div class="twocol" style="">
-							<img data-src="img/docker-benefits-consolidate.png" alt="Konsolidierung" class="floaticon plain" />
-							<p class="floaticon">
-								<strong>Serverkonsolidierung</strong><br>
-								<span class="decent sm">System-agnostisch</span>
-							</p>
-
-							<img data-src="img/docker-benefits-deploy.png" alt="Schnelleres Deployment" class="floaticon plain tgap" />
-							<p class="floaticon tgap">
-								<strong>Deployment</strong><br>
-								<span class="decent sm">Einfach; Container als Einheit</span>
-							</p>
-							</div>
-						</div>
-
-						<div class="fragment decent" >
-							<div data-markdown class="sm" style="border-top: 5px solid #42affa; margin: 16px auto 0; padding: 32px 0 0 0 ;">
-								#### Brauche ich Docker?
-								- Was sind signifikante Vorteile?
-								- Ressourcen für komplexe, ungelöste Probleme?
-							</div>
-
-							<div data-markdown class="container emphasize">
-								_»Let’s Dockerize everything«_ ➱ ziemlich wild & übermütig!
-							</div>
-						</div>
-
-						<aside class="notes" data-markdown>
-						#### Automatisierung:
-						- Automatiiserung Systembereitstellung, Configuration & Delivery
-
-						#### Immutability
-
-						- Konfiguration = Code. Setup entfällt
-
-						#### Serverkonsolidierung:
-
-						- It can get more applications running on the same hardware than other technologies; it makes it easy for developers to quickly create, ready-to-run containered applications; and it makes managing and deploying applications much easier.
-						- System-agnostisch
-						- Instanz & Server damit Wegwerfware
-
-						#### Deployment:
-
-						- vereinfacht Bereitstellung
-						- Container = Baustein für komplexe Infrastrukturen
-						- Applikationszentriert statt Infrastruktur-Zentrierte Sicht
-						</aside>
-					</section>
-
-				</section>
-
-
-				<section
-					style="background: rgba(0,0,0,.6)"
-					data-background="https://33.media.tumblr.com/fff297fe7db149b209e91cfbca70acd0/tumblr_mi6xc7l6Be1s5ys1do1_500.gif"
-					data-background-transition="zoom">
-					<h2>Tools</h2>
-
-					<div class="container" style="font-size: 68%;width: 90%; line-height: 1.1em;">
-						<div data-markdown class="col3-l">
-							###### GUIs
-							- Docker [Kitematic](https://kitematic.com/)
-							- [Panamax](http://panamax.io/), ...
-
-							##### Spezielle Linux-Distros
-							- [RancherOS](http://rancher.com/rancher-os/)
-							- [CoreOS](https://coreos.com/), ...
-
- 							###### Private Image Registry
-							- Docker [Distribution](https://github.com/docker/distribution)
-							- [Artifactory](http://www.jfrog.com/open-source/), ...
-
-							###### Networking
-							- [Weaveworks](http://weave.works/)
-							- CoreOS [Flannel](https://github.com/coreos/flannel), ...
-						</div>
-
-						<div data-markdown class="col3-c">
-							###### Service discovery
-							- CoreOS [etcd](https://github.com/coreos/etcd)
-							- Apache [Zookeeper](https://zookeeper.apache.org/)
-							- [Consul](https://www.consul.io/)
-
-							###### Cluster / Orchestrierung
-							- [Rancher](http://rancher.com/rancher-io/)
-							- [Kubernetes](http://kubernetes.io/)
-							- [Shipyard](http://shipyard-project.com/)
-							- Docker [Compose](https://docs.docker.com/compose/) / [Swarm](http://docs.docker.com/swarm/)
-							- Apache [Mesos](http://mesos.apache.org/) / [Marathon](https://mesosphere.github.io/marathon/)
-							- [MaestroNG](https://github.com/signalfuse/maestro-ng)
-							- CoreOS [fleet](https://github.com/coreos/fleet), ...
-						</div>
-
-						<div data-markdown  class="col3-r">
-							###### Config Mgmt.
-							- [Ansible](http://www.ansible.com/)
-							- [Puppet](https://puppetlabs.com/)
-							- [Chef](https://www.chef.io/)
-							- [Capistrano](http://capistranorb.com/)
-
-							###### Interessante Java-Tools
-							- [Dropwizard](http://dropwizard.io)
-							- [Spark](http://sparkjava.com)
-							- [Vert.x](http://vertx.io)
-							- [Spring Boot](http://http://projects.spring.io/spring-boot)
-							- [Docker Maven-Plugins](https://github.com/alexec/docker-maven-plugin/blob/master/COMPETITORS.md)
-						</div>
-
-						<div style="clear:both"/>
-
-						<div data-markdown style="font-size: 0.6em; color: #666; padding: 20px 0;">
-							Image Credits:
-							_Southampton Container Port_
-							[Geni](http://commons.wikimedia.org/wiki/File:Southampton_container_port_2_ships.JPG) /
-							[CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/),
-							_Blades_
-							[zagrobot](https://www.flickr.com/photos/zagrobot/2731084578)
-							[CC-BY-2.0](https://creativecommons.org/licenses/by/2.0/)
-						</div>
-					</div>
-				</section>
 
 			</div>
 		</div>
@@ -1246,13 +604,13 @@ web1:
 			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
 				// Display controls in the bottom right corner
-			    controls: true,
+			    controls: false,
 
 			    // Display a presentation progress bar
 			    progress: true,
 
 			    // Display the page number of the current slide
-			    slideNumber: false,
+			    slideNumber: true,
 
 			    // Push each slide change to the browser history
 			    history: true,
