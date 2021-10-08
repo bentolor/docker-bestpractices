@@ -1,11 +1,8 @@
-# Eine Einführung in Docker für Java-Entwickler
+# LT-142 - Container bauen und pflegen: Best Practices
 
-Dies sind die Slides für unseren Docker Talk
- _"Teile und Herrsche - Verteilte Java-Anwendungen mit Docker"_
+In dieser Session möchte ich kurz Internas, verschiedene Kochrezepte, Best Practices und Hinweise für das bauen von Container Images geben. Vom Verständnis des Layer, Tags und IDs über den richtigen Einsatz von RUN, Reduktion der Layer, der laufenden Inspektion im Betrieb, dem Umgang mit init-Process und ENTRYPOINT bis hin zu generellen Punken wie Distroless, SAST und Security im Allgemeinen
 
-Der Vortrag nutz Reveal.JS, eigen kreierte Graphiken und steht unter einer
-Creative Commons Lizenz.
+
 
 ## Live-Fassung
-
-Siehe https://bentolor.github.io/docker-talk/
+Siehe https://bentolor.github.io/docker-bestpractices/
