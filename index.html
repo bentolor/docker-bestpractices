@@ -251,13 +251,15 @@ ENTRYPOINT java -jar app.jar server
 							- Dockerfile: Jeder Schritt = **neuer Layer** ➱ `docker history`
 							- **Versionierung:** Layer-ID = Container/Image ID ➱ `ac408c338`
 						</div>
-					</section>					
-
-
-					<section data-background-video="img/docker-layers.mp4">
 					</section>
 
-					<section> 
+
+					<section >
+
+						<video controls data-autoplay src="img/docker-layers.mp4"></video>
+					</section>
+
+					<section>
 						<div data-markdown="">
 							### Weitere Mittel Gewicht zu verlieren…
 							* Größe des Basis-Image, z.B. **Google Project "Distroless"**   <!-- -->
@@ -295,9 +297,24 @@ ENTRYPOINT java -jar app.jar server
 						</div>
 					</section>
 
-					<section data-background-video="img/trivy.mp4" >
+					<section >
+						<div class="" data-markdown>
+							## Scanning mit `trivy`
+
+							```bash
+							$ sudo docker run --rm \
+							      -v /var/run/docker.sock:/var/run/docker.sock \
+								  -v /tmp/triycache/:/root/.cache/ aquasec/trivy \
+								  -q my/microservice
+
+							```
+						</div>
 					</section>
-				</section>					
+
+					<section data-background-video="img/trivy.mp4">
+						<!--<video controls src="img/trivy.mp4"></video>-->
+					</section>
+				</section>
 
 
 				<section>
@@ -324,12 +341,13 @@ ENTRYPOINT java -jar app.jar server
 					<section >
 						<div class="container" data-markdown>
 							## Datenhaltung
-							* Keine Datenhaltung im Container  <!-- --> 
+							* Keine Datenhaltung im Container  <!-- -->
 							  → Container sind Wegwerfware & zustandslos
 							* Datenhaltung exklusiv in Volumes oder Services
 							* Idealfall: Filesystem des Containers ist r/o:
 							```
-							docker run … --read-only --tmpfs /run:rw  myservice
+							docker run … --read-only
+							               --tmpfs /run:rw  myservice
 							```
 						</div>
 					</section>
@@ -409,7 +427,8 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 					<section >
 						<div class="pc90 container" data-markdown>
 							## Weitere Best-Practices
-							* `Dockerfile` linten, z.B. via https://hadolint.github.io/
+							* `Dockerfile` linten,    <!-- -->
+							z.B. via https://hadolint.github.io/hadolint/
 							* `.dockerignore` nutzen; `COPY` over `ADD` bevorzugen
 							* Docker Build-Cache verstehen, nutzen & steuern
 							* **Immutable** is key
