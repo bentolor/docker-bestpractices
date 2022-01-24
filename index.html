@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>LT-142 - Container bauen und pflegen</title>
+		<title>Building, Running &amp; Maintaining Containers &dash; Best Practices</title>
 
 		<meta name="description" content="Eine Einführung in den Einsatz von docker für Java-Anwendungen">
 		<meta name="author" content="Benjamin Schmid">
@@ -39,6 +39,8 @@
 
 	<body>
 
+		<div id="logo"><img src="img/nagarro-logo.svg"></img></div>
+
 		<div class="reveal">
 
 			<!-- Any section element inside of this container is displayed as a slide -->
@@ -47,11 +49,10 @@
 
 				<section>
 					<div id="title">
-					<h1 style="margin: 10px">LT-142 - Container bauen und pflegen</h1>
-					<h3>Best Practices</h3>
+					<h1 style="margin: 10px">Building, Running <br/>&amp; Maintaining Containers</h1>
+					<h3>Best Practices exemplified in Docker</h3>
 
 					<!-- Profil-Karten -->
-					<div class="container">
 					    <div class="profile">
 								<div class="profile-sidebar">
 									<div class="profile-userpic">
@@ -59,10 +60,10 @@
 									</div>
 									<div class="profile-usertitle">
 										<div class="profile-usertitle-name">
-											Benjamin Schmid
+											Benjamin <br/>Schmid
 										</div>
 										<div class="profile-usertitle-job">
-											Manager R&I
+											
 										</div>
 									</div>
 							</div>
@@ -70,7 +71,6 @@
 				   				<a href="https://twitter.com/bentolor">@bentolor</a>
 	            			</div>
 						</div>
-					</div>
 					</div>
 
 					<div id="footer" style="display: none;">
@@ -98,36 +98,36 @@
 
 				<section>
 					<section>
-						<h2 class="toc-element">Docker in a nutshell</h2>
+						<h2 class="toc-element">Containers in a nutshell</h2>
 
 						<div class="container">
 							<ul class="fragment fade-out" data-fragment-index="6">
 								<li>
 									<strong  data-fragment-index="1">
-										Isolierte Prozessausführung</strong> (Sandbox)
-										<br> auf Basis von »Linux Containers (LXC)«</li>
+										Isolated process execution</strong> (Sandbox)
+										<br> based on »Linux Containers (LXC)«</li>
 								<li>
-									Wesentlich effizienter als VMs/Hypervisoren</li>
+									Far more efficent compared to VMs/Hypervisors</li>
 								<li>
 									<strong  class="" data-fragment-index="3">
-										Portables Format</strong> für Container mit
-										<strong class="" data-fragment-index="3">Versionierung
+										Portable Format</strong> for Containers incl.
+										<strong class="" data-fragment-index="3">Versioning
 										</strong></li>
 								<li>
-									Leichtgewichtige Laufzeit- und Packaging-Tools </li>
+									Lightweight Runtime- &amp; Packaging tooling </li>
 								<li>
-									Cloud-Repository für Container-Vorlagen </li>
+									Cloud-Repository offering Base Templates </li>
 							</ul>
 						</div>
 
 						<div data-markdown class="fragment container"  data-fragment-index="6"
 						     style="position: fixed;top: 40%;
-						  left: 200px;
-						  width: 800px;
+						  left: 100px;
+						  width: 920px;
 						  height: 90px;
 						  z-index: 10;
-						  padding: 0 40px;
-						  background-color: rgba(66, 175, 250, 1);">
+						  padding: 0 32px;
+						  background-color: #f8485e;">
 							**Build** Once, **Configure** Once and **Run Anywhere**
 						</div>
 					</section>
@@ -159,18 +159,18 @@
 
 				<section>
 					<h2>(Some) Key Objectives</h2>
-					<h4 style="margin: -35px 0 50px 0;">für die Pflege von Container Images</h4>
+					<h4 style="margin: -35px 0 50px 0;">for container image maintenance</h4>
 
-					<div data-markdown >
+					<div data-markdown>
 						1. Performance & Size
 
-						1. Security & Update-Management
+						1. Security & Update Management
 
-						1. Diagnostik & Robustheit
+						1. Diagnostics & Resilency
 						
-						1. Einhaltung von Best Practices  
+						1. Following Best Practices  
 
-						1. Sicherer Betrieb
+						1. Running Securely
 
 					</div>
 					<aside class="notes" data-markdown>					
@@ -182,31 +182,30 @@
 				<section>
 					<section>
 						<div class="pc90 container" data-markdown>
-							# Image-Diät
+							# Container Diet
 						</div>
 					</section data-markdown>
 
 					<section>
-						<h3>Images bauen: <code>Dockerfile</code></h3>
+						<h3>Building Images using: <code>Dockerfile</code></h3>
 
 						<pre><code data-trim class="docker compact">FROM openjdk:slim
 MAINTAINER Inspector Gadget
 
-                            # Kommando im Container ausführen
+                            # Run a command within container
 RUN apt-get update &amp;&amp; apt-get install unzip -y &amp;&amp;  \
     apt-get clean &amp;&amp; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-                            # JAR und Config-File in Image aufnehmen
+                            # include JAR and Config file
 WORKDIR /opt
 ADD target/rest-microservice-1.0.0.jar app.jar
 ADD src/main/resources/example.yml     app.yml
 
                             # announce exported port 8080 and 8081
 EXPOSE 8080 8081
-                            # Wichtig: Separate Volumes für Daten
+                            # Important: separates volumes for data
 VOLUME ["/srv/"]
-
-                            # JAR ausführen beim Start des Containers
+                            # Run JAR on container startup
 ENTRYPOINT java -jar app.jar server
 							</code></pre>
 
@@ -245,29 +244,28 @@ ENTRYPOINT java -jar app.jar server
 						<h2>Layers &amp; Union File System</h2>
 
 						<div data-markdown>
-							- Filesystem aus gestapelten **Layern** (Union File System)
-							- **Images** sind schreibgeschützte Layers &amp; Meta
-							- Schreibbarer Layer dazu ➱ **Container**.
-							- Dockerfile: Jeder Schritt = **neuer Layer** ➱ `docker history`
-							- **Versionierung:** Layer-ID = Container/Image ID ➱ `ac408c338`
+							- Filesystem consiting of stacked **layers** (Union File System)
+							- **Images** are write-protected Layers &amp; Metadata
+							- Writeable layer ontop ➱ **Container**.
+							- Dockerfile: Each steps creates a new layer ➱ `docker history`
+							- **Versioning:** Layer-ID = Container/Image ID ➱ `ac408c338`
 						</div>
 					</section>
 
 
 					<section >
-
 						<video controls data-autoplay src="img/docker-layers.mp4"></video>
 					</section>
 
 					<section>
 						<div data-markdown="">
-							### Weitere Mittel Gewicht zu verlieren…
-							* Größe des Basis-Image, z.B. **Google Project "Distroless"**   <!-- -->
-							  `openjdk:slim` → 426 MB    <!-- -->
-							  `gcr.io/distroless/java:11` → 228MB
-							* Tools wie `docker-slim` oder  `jlink`
-							* Layers zusammenfassen mit `docker build --squash …`
-							* **Multistage Builds** für _Build_- vs. _Run_-Container
+							### More ways to loose weight…
+							* Smaller Base Images, i.e. **Google Project "Distroless"**   <!-- -->
+							    * `openjdk:slim` → 426 MB    <!-- -->
+							    * `gcr.io/distroless/java:11` → 228MB
+							* **Special tools** like `docker-slim`, `jlink`, …
+							* **Merge layers** using `docker build --squash …`
+							* **Multistage Builds** for _Build_-Container vs. _Run_-Container
 						</div>
 					</section>
 
@@ -277,29 +275,40 @@ ENTRYPOINT java -jar app.jar server
 				<section>
 					<section>
 						<div class="pc90 container" data-markdown>
-							# Sicher & Aktuell
+							# Secure & Fresh
 						</div>
 					</section data-markdown>
 
 					<section >
 						<div class="pc90 container" data-markdown>
-							## Neue Challenges
+							## New Challenges in DevOps
 
-							Als Entwickler / DevOps Engineer Pflege-Verantwortung für **alle** Bestandteile des Images.
-							→ Prozess-Behandlung notwendig
+							DevOps engineers inherit responsibility & maintenance duties 
+							for **all** parts of a system → **dedicated management required**
 
-							* Regelmäßige (Security)-Releases
-							* (Daily) Dependency Scanning   <!-- -->
-							  z.B. via `renovatebot` oder _Gitlab SAST_
-							* (Daily) Container Scanning mit `trivy` oder `grype`
-							* Sorgfältige Auswahl des Basis-Image → <!-- -->
-							  _Weniger ist mehr!_
+							###### Continuously
+
+							* (Security) updates & releases
+							* **Dependency Scanning**   <!-- -->
+							  i.e., using `renovatebot` or `Gemnasium`
+							* **Container Scanning**, i.e. using `trivy` or `grype`  <!-- -->
+							* **Infrastructure Scanning**, i.e. `kics`    <!-- -->
+							→ _Terraform, K8s, Docker, CloudFormation, CDK, Helm_
 						</div>
 					</section>
 
+
 					<section >
 						<div class="" data-markdown>
-							## Scanning mit `trivy`
+							# Choose carefully! 
+							## → Less is More!
+						</div>
+					</section>
+
+
+					<section >
+						<div class="" data-markdown>
+							## `trivy` Container Scanning 
 
 							```bash
 							$ sudo docker run --rm \
@@ -311,8 +320,8 @@ ENTRYPOINT java -jar app.jar server
 						</div>
 					</section>
 
-					<section data-background-video="img/trivy.mp4">
-						<!--<video controls src="img/trivy.mp4"></video>-->
+					<section>
+						<video data-autoplay src="img/trivy.mp4"></video>
 					</section>
 				</section>
 
@@ -320,16 +329,17 @@ ENTRYPOINT java -jar app.jar server
 				<section>
 					<section>
 						<div class="pc90 container" data-markdown>
-							# Diagnostik &amp; Robustheit
+							# Diagnostics &amp; Resilency
 						</div>
 					</section data-markdown>
 
 					<section >
 						<div class="container" data-markdown>
-							## Logging & Konfiguration
-							* Logging per Default _unbuffered_ nach `STDOUT` und `STDERR`
-							* Abwägung: Logging als JSON
-							* Konfiguration über Umgebungsvariablen (zur Not: Volumes) bzw. _secrets_ und _configs_
+							## Logging & Configuration
+							* Per default write logs _unbuffered_ to `STDOUT` and `STDERR` only
+							* Balance between Plain text vs. JSON log record
+							* Configure _only_ via _environment variables_, _secrets & config maps_  <!-- -->
+							Last fallback: Volumes
 							```shell
 							$ docker run --env VAR1=val1 --env VAR2=val2  …
 							$ docker run --env-file env.list  …
@@ -340,11 +350,11 @@ ENTRYPOINT java -jar app.jar server
 
 					<section >
 						<div class="container" data-markdown>
-							## Datenhaltung
-							* Keine Datenhaltung im Container  <!-- -->
-							  → Container sind Wegwerfware & zustandslos
-							* Datenhaltung exklusiv in Volumes oder Services
-							* Idealfall: Filesystem des Containers ist r/o:
+							## Data Management
+							* **Do not** store any data inside containers  <!-- -->
+							  → containers are disposables & stateless
+							* Data storage exclusively via volumes & services
+							* _Ideally:_ filesystem of containers are _r/o_:
 							```
 							docker run … --read-only
 							               --tmpfs /run:rw  myservice
@@ -354,12 +364,12 @@ ENTRYPOINT java -jar app.jar server
 
 					<section >
 						<div class="container " data-markdown>
-							## Health-Checks
+							## Health Checks
 
-							Endpunkte für Health (`/health`), Ready (`/ready`)
-							und ggf. Metriken (`/metrics`) anbieten.
+							**Do** offer monitoring endpoints, like health check (`/health`), <!-- --> 
+							readieness (`/ready`) and optionally metrics (`/metrics`).
 
-							Anbindung z.B. im `Dockerfile`:
+							Usage declaration, i.e. in a `Dockerfile`:
 ```Docker
 HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
             --start-period=5s --retries=3 \   <!-- -->
@@ -374,19 +384,19 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 				<section>
 					<section>
 						<div class="pc90 container" data-markdown>
-							# Angreifer zähmen!
+							# Tame the Attackers!
 						</div>
 					</section data-markdown>
 
 					<section >
 						<div class="container" data-markdown>
-							## Muss es immer `root` sein?
+							## Does it always need to be `root`?
 							
-							* Docker-Daemon: völlige Kontrolle über den Host 
-							* Container: per Default viele Privilegien
+							* Docker-Daemon: Owns _total_ control over the host 
+							* Containers: Per default sharing many privileges
 							
-							Um den Impact einer RCE zu begrenzen, Applikationen im Container mittels `USER` 
-							als _nicht-privilegiert,  nicht `sudo`-fähig_ betreiben:
+							To limit the Impact of a RCE, run applications inside container 
+							via `USER` as _non-privileged, non `sudo`-able_:
 
 							```
 							FROM alpine
@@ -400,25 +410,26 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 
 					<section >
 						<div class="container pc90" data-markdown>
-							## Augen auf bei der Image-Wahl!
-							* _verfified_ und _official_?
-							* Noch supported & regelmäßige Security Updates?
-							* ggf. `Dockerfile` der Quelle geprüft?	
-							* Namen & Tags sind Schall & Rauch!  <!-- -->
-							  → Trusted Sourcen oder SHA1 als Referenz   <!-- -->
-							  → `latest` kann Pitfall sein
+							## Keep your eyes open on choosing base images!
+							* Marked as _verified_ &amp; _official_?
+							* Actively supported & receiving regular security updates?
+							* Suspicious? Check the `Dockerfile` of the source!	
+							* Names & tags are smoke and mirrors!  <!-- -->
+							  → Trusted sources or use SHA1 for refering   <!-- -->
+							  → `latest` can be a pitfall
 						</div>
 					</section>
 
  					<section >
 						<div class="pc90 container" data-markdown>
-							## PID 1, Signale & Zombie-Prozesse
-							* Sterben Kind-Prozesse im Container, müssen diese abgeräumt werden → _init_-Prozess
+							## PID 1, Signals & Zombies
+							* If child processes are dying inside containers,  <!-- -->
+							they need to be _'reaped'_ → `init` process
 							   * `docker run --init …`
-							   * Nur ein Prozess direkt als `ENTRYPOINT`
-							   * Init-System wie _tini_ einbinden
-							* Dieser Prozess sollte auch Signale wie `SIGTERM` & Co. behandeln!
-							* Ideal: Ein Prozess pro Image
+							   * Use only one process as `ENTRYPOINT`
+							   * Use an init system like _tini_
+							* This process should also handle Signals like `TERM`, `HUP`!
+							* Goal: One process per container
 						</div>
 					</section>
 
@@ -426,13 +437,12 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 
 					<section >
 						<div class="pc90 container" data-markdown>
-							## Weitere Best-Practices
-							* `Dockerfile` linten,    <!-- -->
-							z.B. via https://hadolint.github.io/hadolint/
-							* `.dockerignore` nutzen; `COPY` over `ADD` bevorzugen
-							* Docker Build-Cache verstehen, nutzen & steuern
+							## More best practices
+							* Lint your `Dockerfile` i.e., using [Hadolint](https://hadolint.github.io/hadolint/)
+							* Use `.dockerignore`; prefer `COPY` over `ADD`
+							* Understand, use & control the Docker build cache
 							* **Immutable** is key
-							* Konfiguration _vollständig_ extern halten
+							* Always _fully_ **externalize configuration**
 						</div>
 					</section>
 
@@ -468,12 +478,15 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 
 					<section data-background="img/pom-maven.jpg" data-background-transition="zoom">
 						<div class="container decent"
-							style="background-color: rgba(64,64,78,.8); width: 640px; border: 2px solid #666;
+							style="background-color: rgba(64,64,78,.8); width: 480px; border: 2px solid #666;
 						 	position: absolute; right: 0px; top: 0px; padding: 0 32px 18px;"
 							data-markdown>
-							**`Dockerfile`-Alternativen:** 
+							#### Build alternatives
 							
-							Paketo.io, jib, s2i (source-to-image), &hellip;
+							* Paketo.io
+							* jib 
+							* s2i (source-to-image)
+							* &hellip;
 						</div>
 						<div style="width: 100%; height: 600px;"/>
 
@@ -495,30 +508,31 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 				<section>
 					<section>
 						<div class="pc90 container" data-markdown>
-							# «Ja, wo laufen sie denn?»
+							# Fenton! Feeeenton!!
+							### «Where are they running?»
 						</div>
 					</section>
 
 					<section >
 						<div class="container" data-markdown>
 							## Docker Daemon & `docker.sock`
-							Zugriff auf `docker.socket` ist effektiv voller root-Zugriff
+							Access to `docker.socket` effectively is root access on host!
 
-							* möglichst Zugriff _nur_ für `127.0.0.1` und _nur_ für `root`
-							* Wenn's sein muss: TCP-Zugriff stabil absichern!
-							* Alternative _podman_ für Rootless-Betrieb
+							* Preferably limit access  _only_ to `127.0.0.1` and _only_ for `root`
+							* If it has to be: Securely protect TCP access!
+							* Consider _podman_ as rootless runtime alternative
 						</div>
 					</section>
 
 					<section >
 						<div class="container pc90" data-markdown>
-							## Privilegien & Limits
+							## Privileges & Limits
 							
-							By default weitreichende Privilegien & _Capabilities_ der Container über den Host!
-							Zusätzliches `--privileged` ist quasi völlige Sandbox-Aufgabe.
+							By default container own _extensive_ host privileges & _capabilities_!
+							Adding `--privileged` equals completely surrendering sandboxing at all.
 
-							→ Es empfiehlt sich daher Container stets 
-							mit **minimalen Capabilities** und **Ressource-Limits** zu starten:
+							→ Therefore, **do** run container always with as **minimal capabilities** 
+							and **resource limits** as possible:
 
 							```bash
 							$ docker run --cap-drop all --cap-add … \
@@ -531,9 +545,9 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 
 					<section >
 						<div class="container" data-markdown>
-							## `docker-bench` kann Tipps geben
-							Im laufenden Betrieb z.B. Tools vie Docker-Bench nutzen, 
-							die über Heuristiken Empfehlungen für das Hardening anbieten
+							## Get hints by `docker-bench`
+							On the fly, use tools such as `docker-bench-security`, 
+							which offer recommendations for hardening via heuristics:
 
 							```bash
 							$ sudo docker run --rm --net host --pid host \
@@ -551,13 +565,14 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 						</div>
 					</section>
 
-					<section data-background-video="img/docker-bench.mp4">
+					<section>
+						<video data-autoplay src="img/docker-bench.mp4"></video>
 					</section>
 				</section>
 
 				<section>
 					<div class="pc90 container" data-markdown>
-						# Vielen Dank!
+						# Thank you!
 					</div>
 				</section>
 
@@ -693,10 +708,10 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 			    viewDistance: 3,
 
 			    // Parallax background image
-			    parallaxBackgroundImage: 'img/southampton_container_port_2_ships.jpg', // e.g. "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'"
+			    parallaxBackgroundImage: 'img/nagarro-bg.jpg', // e.g. "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'"
 
 			    // Parallax background size
-			    parallaxBackgroundSize: '3874px 2100px', // CSS syntax, e.g. "2100px 900px"
+			    parallaxBackgroundSize: '4096px 2073px', // CSS syntax, e.g. "2100px 900px"
 
 			    // Amount to move parallax background (horizontal and vertical) on slide change
 			    // Number, e.g. 100
