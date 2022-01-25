@@ -14,14 +14,14 @@
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="theme/black.css" id="theme">
 
 		<!-- Code syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<link rel="stylesheet" href="plugin/highlight/zenburn.css">
 
 		<!-- Custom, overriding CSS -->
-		<link rel="stylesheet" href="css/docker.css">
+		<link rel="stylesheet" href="docker.css">
 
 		<!-- Printing and PDF exports -->
 		<script>
@@ -180,7 +180,7 @@
 
 				
 				<section>
-					<section data-background-video="video/pexels-polina-kovaleva-5645055.mp4" data-background-size="cover">
+					<section data-background-video="video/pexels-polina-kovaleva-5645055.mp4" >
 						<div class="pc90 container" data-markdown>
 							# Container Diet
 						</div>
@@ -273,7 +273,7 @@ ENTRYPOINT java -jar app.jar server
 
 
 				<section>
-					<section data-background-video="video/Pexels_Videos_2070044.mp4" data-background-size="cover">
+					<section data-background-video="video/Pexels_Videos_2070044.mp4" data-background-video-muted="true" >
 						<div class="pc90 container" data-markdown>
 							# Secure & Fresh
 						</div>
@@ -327,7 +327,7 @@ ENTRYPOINT java -jar app.jar server
 
 
 				<section>
-					<section  data-background-video="video/pexels-cottonbro-7319202.mp4" data-background-size="cover">
+					<section  data-background-video="video/pexels-cottonbro-7319202.mp4" data-background-video-muted="true"  >
 						<div class="pc90 container" data-markdown>
 							# Diagnostics &amp; Resilency
 						</div>
@@ -382,7 +382,7 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 
 
 				<section>
-					<section   data-background-video="video/pexels-mikhail-nilov-6963744.mp4" data-background-size="cover">
+					<section   data-background-video="video/pexels-mikhail-nilov-6963744.mp4" data-background-video-muted="true">
 						<div class="pc90 container" data-markdown>
 							# Tame the Attackers!
 						</div>
@@ -506,7 +506,7 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 
 
 				<section>
-					<section data-background-video="video/fenton.webm" data-background-size="cover">
+					<section data-background-video="video/fenton.webm" >
 						<div class="pc90 container" data-markdown >
 							# Fenton! Feeeenton!!
 							### «Where are they running?»
@@ -570,7 +570,7 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 					</section>
 				</section>
 
-				<section data-background-video="video/pexels-rodnae-productions-7563906.mp4" data-background-size="cover">
+				<section data-background-video="video/pexels-rodnae-productions-7563906.mp4" >
 					<div class="pc90 container" data-markdown>
 					</div>
 				</section>
@@ -628,14 +628,21 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 			</div>
 		</div>
 
-		<script src="lib/js/head.js"></script>
-		<script src="js/reveal.js"></script>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/zoom/zoom.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/search/search.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
 
 		<script>
 
 			// Full list of configuration options available at:
 			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
+				hash: true, 
+
 				// Display controls in the bottom right corner
 			    controls: false,
 
@@ -733,15 +740,18 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 				// Ctrl + Mouse-Click ==> Zoom in
 				zoomKey: 'ctrl',
 
+
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+
 				// Optional reveal.js plugins
-				dependencies: [
+				/*dependencies: [
 					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
 					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
 					{ src: 'plugin/zoom-js/zoom.js', async: true },
 					{ src: 'plugin/notes/notes.js', async: true }
-				]
+				]*/
 			});
 
 			Reveal.addEventListener( 'webm-video', function() {
@@ -752,32 +762,5 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 			} );
 
 		</script>
-
-
-		<script src="js/zepto.min.js"></script>
-		<script>
-		    Zepto(function ($) {
-
-		        var tableOfContents = $('#table-of-contents');
-		        var tableList = $('<ol />')
-
-		        $('.toc-element').each(function (index) {
-		            var _self = $(this),
-		                    hash = '#/' + _self.closest('section').index();
-
-		            if (_self.text()) tableList.append([
-		                '<li>',
-		                    //    '<a href="' + hash + '">',
-		                _self.text(),
-		                	//'</a>',
-		                '</li>'
-		            ].join(''));
-
-		        });
-
-		        tableOfContents.html(tableList);
-		    });
-		</script>
-
 	</body>
 </html>
