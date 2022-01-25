@@ -22,19 +22,6 @@
 
 		<!-- Custom, overriding CSS -->
 		<link rel="stylesheet" href="docker.css">
-
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-
-		<!--[if lt IE 9]>
-		<script src="lib/js/html5shiv.js"></script>
-		<![endif]-->
 	</head>
 
 	<body>
@@ -75,7 +62,7 @@
 
 					<div id="footer" style="display: none;">
 						<div id="logo">
-							<img src="img/eXXcellent logo-transparent.png" alt="eXXcellent solutions" />
+							<img src="img/nagarro-logo.svg" />
 						</div>
 						<div id="helpfooter">
 							? für Hilfe, S für Folien-Notizen
@@ -180,7 +167,7 @@
 
 				
 				<section>
-					<section data-background-video="video/pexels-polina-kovaleva-5645055.mp4" >
+					<section data-background-video="video/pexels-polina-kovaleva-5645055.mp4">
 						<div class="pc90 container" data-markdown>
 							# Container Diet
 						</div>
@@ -570,9 +557,14 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 					</section>
 				</section>
 
-				<section data-background-video="video/pexels-rodnae-productions-7563906.mp4" >
-					<div class="pc90 container" data-markdown>
+				<section data-background-video="video/pexels-rodnae-productions-7563906.mp4" 
+						 data-background-video-loop="true"
+						 data-undim
+				>
+<!-- 					<div class="pc90 container" data-markdown>
+						# Thank you!
 					</div>
+ -->				
 				</section>
 
 
@@ -760,6 +752,15 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 					videoElems[0].playbackRate = 3.0;
 				}
 			} );
+
+			Reveal.on('slidechanged', e => {
+				if (e && e.currentSlide) {
+					let isRemoveDim = e.currentSlide.hasAttribute("data-undim");
+					let bg = document.getElementsByClassName("backgrounds")[0];
+					if (isRemoveDim) bg.style.filter = 'none'
+					else bg.style.filter = '';
+				}
+			});
 
 		</script>
 	</body>
