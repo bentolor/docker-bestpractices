@@ -85,31 +85,32 @@
 
 				<section>
 					<section>
-						<h2 class="toc-element">Containers in a nutshell</h2>
+						<h2 class="toc-element">Containers &dash; but why?</h2>
 
 						<div class="container">
 							<ul class="fragment fade-out" data-fragment-index="6">
 								<li>
-									<strong  data-fragment-index="1">
-										Isolated process execution</strong> (Sandbox)
-										<br> based on »Linux Containers (LXC)«</li>
+									<strong  class="fragment highlight-current-green" data-fragment-index="1">
+										Isolated process execution</strong>
+										<br>Sandboxes based on »Linux Containers (LXC)«</li>
 								<li>
-									Far more efficent compared to VMs/Hypervisors</li>
+									Far <strong class="fragment highlight-current-green"  data-fragment-index="2">more efficient</strong> 
+									compared to VMs/Hypervisors</li>
 								<li>
-									<strong  class="" data-fragment-index="3">
+									<strong  class="fragment highlight-current-green" data-fragment-index="3">
 										Portable Format</strong> for Containers incl.
-										<strong class="" data-fragment-index="3">Versioning
+										<strong class="fragment highlight-current-green" data-fragment-index="3">Versioning
 										</strong></li>
 								<li>
-									Lightweight Runtime- &amp; Packaging tooling </li>
+									<strong  class="fragment highlight-current-green" data-fragment-index="4">Lightweight</strong> Runtime- &amp; Packaging tooling </li>
 								<li>
-									Cloud-Repository offering Base Templates </li>
+									Open <strong class="fragment highlight-current-green" data-fragment-index="5">cloud repository</strong> ecosystem for base images</li>
 							</ul>
 						</div>
 
-						<div data-markdown class="fragment container"  data-fragment-index="6"
-						     style="position: fixed;top: 40%;
-						  left: 100px;
+						<div data-markdown class="fragment"  data-fragment-index="6"
+						     style="position: fixed;top: 38%;
+						  left: 160px;
 						  width: 920px;
 						  height: 90px;
 						  z-index: 10;
@@ -149,29 +150,36 @@
 					<h4 style="margin: -35px 0 50px 0;">for container image maintenance</h4>
 
 					<div data-markdown>
-						1. Performance & Size
+						1. Performance & **Size**
 
-						1. Security & Update Management
+						1. Security & **Update Management**
 
-						1. Diagnostics & Resilency
+						1. **Diagnostics** & Resiliency
 						
-						1. Following Best Practices  
+						1. System **Hardening**
 
-						1. Running Securely
+						1. Safe & **Secure Runtime Environments**
 
 					</div>
-					<aside class="notes" data-markdown>					
+					<aside class="notes" data-markdown>
+						Today I'll try to illustrate a few hand-picked Key Objectives in the challenge of Managing Containers
 					</aside>
-
 				</section>
 
 				
 				<section>
-					<section data-background-video="video/pexels-polina-kovaleva-5645055.mp4">
+					<section data-background-video="video/pexels-polina-kovaleva-5645055.mp4" data-background-video-loop="true">
 						<div class="pc90 container" data-markdown>
 							# Container Diet
 						</div>
-					</section data-markdown>
+						<aside class="notes" data-markdown>
+							Let's start with the first one: Image Size:
+
+							Because Containers are mostly **running in distributed systems**
+							and **constantly getting started & stopped** Image size is also an 
+							important aspect for performance.
+						</aside>						
+					</section>
 
 					<section>
 						<h3>Building Images using: <code>Dockerfile</code></h3>
@@ -197,16 +205,14 @@ ENTRYPOINT java -jar app.jar server
 							</code></pre>
 
 						<aside class="notes sm" data-markdown>
-							Hier unser Eingangs präsentiertes Beispiel:
+							Here a typical example assembling an image:
 
-							- Zuerst mal starten wir von einem Base-Image
-							- Mit `RUN` könenn wir Kommando _innerhalb_ des Containers ausführen
-							- Dann fügen wir Dateien von ausserhalb in den Container hinzu: Hier unsere App-JAR
-							  und Konfigurationsdatei
-							- `EXPOSE` und `ENTRYPOINT` sind Meta-Informationen die Beschreiben, wie der Container
-							   verwendet werden soll. Konkret: Welche Ports aus dem Container später zugänglich
-							   sein sollen und Was beim Container-Start ausführen. In der Regel 1 Prozess.
-							- `VOLUME`: Betrachten wir später
+							- Starting from a base Base-Image
+							- Using `RUN` do do things inside the container
+							- Adding things from outside the containeer via add. 
+							   Here our App-JAR & config file.
+							- `EXPOSE` und `ENTRYPOINT` are Meta -Informationen
+							- And we'll about `VOLUME` later again
 						</aside>
 					</section>
 
@@ -216,14 +222,14 @@ ENTRYPOINT java -jar app.jar server
 						/>
 
 						<aside class="notes" data-markdown>
-							- *Filesystem*, bestehend aus gestapelten *Layern* (union filesystem)
-							- **Image** sind *schreibgeschützt*
-							- *Union File System* vereint die verschiedenen Image Layers uns stellt auf oberster
-							Ebene einen *schreibbaren Layer* bereit. Das ist dann ein **Container**.
-							- Image = Layers + Meta-Informationen, Ports, Volumes, Start-Kommando
-							- Dockerfile: Jeder Schritt erzeugt ein separaten Layer -> `docker history`
-							- Layer-ID == Container/Image ID
-							- Versionierung vergleichbar zu Git-Hash: `ac408c338`
+							What does this do?
+							- A container *filesystem* consists of several, stacked *Layers* (union filesystem)
+							- **Images** are *write-protected*
+							- The *Union File System* stacks thos layers and offers a writeable topmost Layer*. this makes it a **Container**.
+
+							**The important part**
+							- Each Dockerfile steps adds a new, immutable layer -> `docker history`
+							- Layer-ID == Container/Image ID, similar to the Git versioning using Git hashes: `ac408c338`
 						</aside>
 					</section>
 
@@ -237,11 +243,24 @@ ENTRYPOINT java -jar app.jar server
 							- Dockerfile: Each steps creates a new layer ➱ `docker history`
 							- **Versioning:** Layer-ID = Container/Image ID ➱ `ac408c338`
 						</div>
+						<aside class="notes" data-markdown>
+							_Recap; skip_
+						</aside>
 					</section>
 
 
-					<section >
+					<section>
 						<video controls data-autoplay src="img/docker-layers.mp4"></video>
+						Reduce layer count &amp; sizes by joining build steps
+						<aside class="notes" data-markdown>
+							Let's see a demo!
+
+							1. First step: We'll use our example Dockerfuile and build the container image
+							2. Next: Let's use `docker history` to understand the image step. **See the 18Meg?**
+							3. Another valueable CLI tool: `dive`. Explore the contents & sizes of a image interactively.
+							4. Now: I modified my Dockerfile to **do file update & deletion in one step**
+							5. Running again you can see: 18M -> 0.5M
+						</aside>
 					</section>
 
 					<section>
@@ -264,6 +283,9 @@ ENTRYPOINT java -jar app.jar server
 						<div class="pc90 container" data-markdown>
 							# Secure & Fresh
 						</div>
+						<aside class="notes" data-markdown>
+							Next topic: Update & Security management!
+						</aside>
 					</section data-markdown>
 
 					<section >
@@ -273,15 +295,22 @@ ENTRYPOINT java -jar app.jar server
 							DevOps engineers inherit responsibility & maintenance duties 
 							for **all** parts of a system → **dedicated management required**
 
+						</div>
+						<div class="fragment container" data-markdown>
 							###### Continuously
 
-							* (Security) updates & releases
+							* (Security) **Updates** & Releases
 							* **Dependency Scanning**   <!-- -->
-							  i.e., using `renovatebot` or `Gemnasium`
+							  _i.e., using `renovatebot` or `Gemnasium`_
 							* **Container Scanning**, i.e. using `trivy` or `grype`  <!-- -->
 							* **Infrastructure Scanning**, i.e. `kics`    <!-- -->
 							→ _Terraform, K8s, Docker, CloudFormation, CDK, Helm_
 						</div>
+						<aside class="notes" data-markdown>
+							... you inherited a whole bunch of routine jobs, formerly done by the ops team!
+
+							Therefore you need to to **continuously**
+						</aside>
 					</section>
 
 
@@ -290,6 +319,9 @@ ENTRYPOINT java -jar app.jar server
 							# Choose carefully! 
 							## → Less is More!
 						</div>
+						<aside class="notes" data-markdown>
+							... to limit your management work, to to limit your dependencies to a minimum!
+						</aside>
 					</section>
 
 
@@ -305,42 +337,64 @@ ENTRYPOINT java -jar app.jar server
 
 							```
 						</div>
+						<aside class="notes" data-markdown>
+							I'll show one tool to do Container Scanning: Trivy; here's the command I'm using 
+							to start a local scan of my image _my/microservice_...
+						</aside>
 					</section>
 
 					<section>
 						<video data-autoplay src="img/trivy.mp4"></video>
+						<aside class="notes" data-markdown>
+							Here you see the output of that tool listing : 
+							* open CVEs of the base image **but**
+							* also detecting an open CVE ina na embedded JAR file.
+
+							So just a little helper tool to assist you in keeping your container fresh & secure.
+						</aside>
 					</section>
 				</section>
 
 
 				<section>
-					<section  data-background-video="video/pexels-cottonbro-7319202.mp4" data-background-video-muted="true"  >
+					<section  data-background-video="video/pexels-cottonbro-7319202.mp4" 
+							data-background-video-muted="true" data-background-video-loop="true" >
 						<div class="pc90 container" data-markdown>
 							# Diagnostics &amp; Resilency
 						</div>
+						<aside class="notes" data-markdown>
+							Let's talk about **a very important topic**: Diagnostics, which is also a key to resilency.
+						</aside>
 					</section data-markdown>
 
 					<section >
 						<div class="container" data-markdown>
 							## Logging & Configuration
 							* Per default write logs _unbuffered_ to `STDOUT` and `STDERR` only
-							* Balance between Plain text vs. JSON log record
-							* Configure _only_ via _environment variables_, _secrets & config maps_  <!-- -->
-							Last fallback: Volumes
+							* Balance between Plain text vs. JSON log records
+							* Do configuration *only* via:  <!-- -->
+							_environment variables_, _secrets & config maps_
 							```shell
 							$ docker run --env VAR1=val1 --env VAR2=val2  …
 							$ docker run --env-file env.list  …
 							```
+							Fallback: Volume-mounted files
 
 						</div>
+						<aside class="notes" data-markdown>
+							A few best practices here:
+
+							1. Log unbuffed to stdout
+							1. Prepare for log ingestion/collection
+						</aside>
 					</section>
 
 					<section >
 						<div class="container" data-markdown>
 							## Data Management
-							* **Do not** store any data inside containers  <!-- -->
+							* **Do not** store _any_ data inside containers  <!-- -->
 							  → containers are disposables & stateless
-							* Data storage exclusively via volumes & services
+							* **Do** data storage exclusively via volumes & services
 							* _Ideally:_ filesystem of containers are _r/o_:
 							```
 							docker run … --read-only
@@ -354,7 +408,7 @@ ENTRYPOINT java -jar app.jar server
 							## Health Checks
 
 							**Do** offer monitoring endpoints, like health check (`/health`), <!-- --> 
-							readieness (`/ready`) and optionally metrics (`/metrics`).
+							readiness (`/ready`) and optionally metrics (`/metrics`).
 
 							Usage declaration, i.e. in a `Dockerfile`:
 ```Docker
@@ -369,21 +423,27 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 
 
 				<section>
-					<section   data-background-video="video/pexels-mikhail-nilov-6963744.mp4" data-background-video-muted="true">
+					<section   data-background-video="video/pexels-mikhail-nilov-6963744.mp4" 
+						data-background-video-muted="true" data-background-video-loop="true">
 						<div class="pc90 container" data-markdown>
 							# Tame the Attackers!
 						</div>
-					</section data-markdown>
+						<aside class="notes" data-markdown>
+							Let's talk about security hardening. 
+							
+							This important, because containers have a sub-optimal default property...
+						</aside>
+					</section >
 
 					<section >
-						<div class="container" data-markdown>
+						<div class="container pc90" data-markdown>
 							## Does it always need to be `root`?
 							
 							* Docker-Daemon: Owns _total_ control over the host 
 							* Containers: Per default sharing many privileges
 							
-							To limit the Impact of a RCE, run applications inside container 
-							via `USER` as _non-privileged, non `sudo`-able_:
+							To limit the Impact of a RCE, run applications inside 
+							container via `USER` as _non-privileged, non `sudo`-able_:
 
 							```
 							FROM alpine

@@ -5,6 +5,10 @@ BODY {
   background-color: #13294B;
 }
 
+.reveal .slides section .fragment.highlight-current-green.current-fragment {
+  color: #47d7ac;
+}
+
 .reveal A {
   color: #47d7ac;
 }
