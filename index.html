@@ -327,14 +327,19 @@ ENTRYPOINT java -jar app.jar server
 
 					<section>
 						<div class="" data-markdown>
-							## `trivy` Container Scanning 
+							## `trivy`
 
 							```bash
-							$ sudo docker run --rm \
+							$ docker run --rm \
 							      -v /var/run/docker.sock:/var/run/docker.sock \
 								  -v /tmp/triycache/:/root/.cache/ aquasec/trivy \
-								  -q my/microservice
+								  image my/microservice
+							```
 
+							## `grype`
+
+							```bash
+							$ grype docker:my/microservice 
 							```
 						</div>
 						<aside class="notes" data-markdown>
