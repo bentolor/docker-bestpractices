@@ -76,6 +76,19 @@
 								<span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">Teile und Herrsche</span> von <a xmlns:cc="http://creativecommons.org/ns#" href="http://twitter.com/bentolor" property="cc:attributionName" rel="cc:attributionURL">Benjamin Schmid, Dr. Ralph Guderlei</a> ist lizenziert unter einer <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons-Lizenz (by-nc-sa)</a>. Beruht <a xmlns:dct="http://purl.org/dc/terms/" href="http://lab.hakim.se/reveal-js/" rel="dct:source">Reveal.JS</a>.
 						</div>
 					</div>
+
+					<aside class="notes" data-markdown>
+						Thank you krita for introduction! 
+						
+						Glad to be here and today I'd love to ... _in 
+						very shoort time_ ... give you a few inspirations
+						and ideas on what to look out when "Building, Running & Maintaining Containers"
+
+						I'll using Docker as a simple base technology for illustration, but most of the topics
+						of course also apply to container runtime areas like **Kubernetes**
+					</aside>
+
+
 				</section>
 
 
@@ -92,13 +105,13 @@
 								<li>
 									<strong  class="fragment highlight-current-green" data-fragment-index="1">
 										Isolated process execution</strong>
-										<br>Sandboxes based on »Linux Containers (LXC)«</li>
+										via Sandboxes <br/>based on »Linux Containers (LXC)«</li>
 								<li>
 									Far <strong class="fragment highlight-current-green"  data-fragment-index="2">more efficient</strong> 
 									compared to VMs/Hypervisors</li>
 								<li>
 									<strong  class="fragment highlight-current-green" data-fragment-index="3">
-										Portable Format</strong> for Containers incl.
+										Portable Format</strong> for Applications incl.
 										<strong class="fragment highlight-current-green" data-fragment-index="3">Versioning
 										</strong></li>
 								<li>
@@ -118,6 +131,17 @@
 						  background-color: #f8485e;">
 							**Build** Once, **Configure** Once and **Run Anywhere**
 						</div>
+
+						<aside class="notes" data-markdown>
+							But first topic, I'll try to give a few insights about the benefits 
+							of containers and recap a few basics on how they work.
+
+							Well, Containers offer a set of benefits...
+
+							So they **DO** deliver, what centuries Java promised as ....
+						</aside>
+
+
 					</section>
 
 					<section>
@@ -129,15 +153,19 @@
 							data-src="img/container_vs_virtualization_2.png"/>
 
 						<aside class="notes" data-markdown>
-							- Container laufen dank **LXC & Namespaces** als voneinander **vollständig isolierte, aber
-							  sonst ganz normale Prozesse** auf dem Host-System.
-							- Es handelt sich um keine vollständige Virtualisierung
-							    - Kernel und RAM wird mit dem Host geteilt
-							    - Nur die im Image gebundelten Dateien & Tools sind zugänglich
-							      (auch Dinge wie `ls`)
-							    - Isoliertes Container-Netzwerk
-							    - Container sieht nur eigene Prozesse
-							- Durch diesen Ansatz ist alles **cheap**: Anlegen, Verwerfen, Starten, Stoppen
+							**How is it working?**
+
+							* Containers are just isolated processes sharing the same machine. 
+							* Linux kernel technologies like "LXC, CGroups and Namespaces" allow to cheaply 
+							  define process sandboxes and limit what parts of the host hey can see.
+							* Containers **share the same OS Kernel, Hardware and RAM of the host!**
+							* They have an isolated, self-contained file system of all user space
+							  applications like the runtime libraries & application
+							* Also have their own network devices
+							* All done using the sandboxing mechanisms; making this type of "Virtualization" 
+							incredible **cheap**
+							* **In comparison VMs virtualize a full hardware stack**, which is 
+							much more expensive and makes resource sharing tehnically  more difficult
 						</aside>
 					</section>
 
@@ -162,7 +190,8 @@
 
 					</div>
 					<aside class="notes" data-markdown>
-						Today I'll try to illustrate a few hand-picked Key Objectives in the challenge of Managing Containers
+						So for today I'll talk about a few hand-picked Key Objectives 
+						and Best Practices in the domain of Managing Containers, namely...
 					</aside>
 				</section>
 
@@ -176,8 +205,10 @@
 							Let's start with the first one: Image Size:
 
 							Because Containers are mostly **running in distributed systems**
-							and **constantly getting started & stopped** Image size is also an 
-							important aspect for performance.
+							and **constantly getting created, started & stopped and thrown away**, 
+							Image size is an important aspect for overall performance.
+
+							And I thinkg we all do know well, how easy it is to gain weight...
 						</aside>						
 					</section>
 
@@ -205,13 +236,15 @@ ENTRYPOINT java -jar app.jar server
 							</code></pre>
 
 						<aside class="notes sm" data-markdown>
-							Here a typical example assembling an image:
+							Together we'll try to destruct & understand how Container images 
+							are built, so that we can better understand, how we can keep them slim!
+
+							Here a typical example for assembling an image usind a `Dockerfile`. 
 
 							- Starting from a base Base-Image
 							- Using `RUN` do do things inside the container
-							- Adding things from outside the containeer via add. 
-							   Here our App-JAR & config file.
-							- `EXPOSE` und `ENTRYPOINT` are Meta -Informationen
+							- Adding files into the containeer via `ADD`. 
+							- Provide some Meta information like `EXPOSE`d Port und `ENTRYPOINT` process 
 							- And we'll about `VOLUME` later again
 						</aside>
 					</section>
@@ -222,13 +255,18 @@ ENTRYPOINT java -jar app.jar server
 						/>
 
 						<aside class="notes" data-markdown>
-							What does this do?
-							- A container *filesystem* consists of several, stacked *Layers* (union filesystem)
-							- **Images** are *write-protected*
-							- The *Union File System* stacks thos layers and offers a writeable topmost Layer*. this makes it a **Container**.
+							What's happening behind the scenes? 
+							- A container *filesystem* consists of several, stacked *Layers*
+							- The union filesystem provides a, well, unified view on those layers
+							- **Images** are just a set of *write-protected* layers while..
+							- containers just offers an additional, writeable Layer on top 
+							
+							-> This makes it a **Container**. And this makes them so cheap, bc you simply can 
+							disard the topmost layer to start of fresh
 
 							**The important part**
 							- Each Dockerfile steps adds a new, immutable layer -> `docker history`
+							   -  Everything in there, wil stay forever & add to the size
 							- Layer-ID == Container/Image ID, similar to the Git versioning using Git hashes: `ac408c338`
 						</aside>
 					</section>
@@ -270,9 +308,14 @@ ENTRYPOINT java -jar app.jar server
 							    * `openjdk:slim` → 426 MB    <!-- -->
 							    * `gcr.io/distroless/java:11` → 228MB
 							* **Special tools** like `docker-slim`, `jlink`, …
-							* **Merge layers** using `docker build --squash …`
 							* **Multistage Builds** for _Build_-Container vs. _Run_-Container
+							* **Merge layers** using `docker build --squash …`
 						</div>
+
+						<aside class="notes" data-markdown>
+							Besides reducing the steps & layer size, a few more options to ...
+						</aside>
+
 					</section>
 
 				</section>
@@ -310,6 +353,10 @@ ENTRYPOINT java -jar app.jar server
 							... you inherited a whole bunch of routine jobs, formerly done by the ops team!
 
 							Therefore you need to to **continuously**
+
+							* Care for ýour application dependencies & bundled services
+							* Care for what inside your runtime environment, i.e., OS level
+							* Care for your security of the Cloud-native ifnrastructure
 						</aside>
 					</section>
 
@@ -349,7 +396,7 @@ ENTRYPOINT java -jar app.jar server
 					</section>
 
 					<section>
-						<video data-autoplay src="img/trivy.mp4"></video>
+						<video controls data-autoplay src="img/trivy.mp4"></video>
 						<aside class="notes" data-markdown>
 							Here you see the output of that tool listing : 
 							* open CVEs of the base image **but**
@@ -369,6 +416,8 @@ ENTRYPOINT java -jar app.jar server
 						</div>
 						<aside class="notes" data-markdown>
 							Let's talk about **a very important topic**: Diagnostics, which is also a key to resilency.
+
+							...and becomes crucical, when things don't work as expected
 						</aside>
 					</section data-markdown>
 
@@ -618,7 +667,7 @@ HEALTHCHECK --interval=60s --timeout=3s \    <!-- -->
 					</section>
 
 					<section>
-						<video data-autoplay src="img/docker-bench.mp4"></video>
+						<video controls data-autoplay src="img/docker-bench.mp4"></video>
 					</section>
 				</section>
 
